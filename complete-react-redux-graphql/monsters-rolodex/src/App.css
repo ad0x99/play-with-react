@@ -1,4 +1,5 @@
 .App {
+  padding-top: 100px;
   text-align: center;
   background-color: #282c34;
   min-height: 100vh;
@@ -8,8 +9,17 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  border-radius: 1px;
 }
 
 .App-link {
   color: #61dafb;
+}
+
+.search-box {
+  width: 25%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  resize: vertical;
 }

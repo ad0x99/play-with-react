@@ -3,7 +3,9 @@ import {
   getAuth,
   signInWithPopup,
   signInWithRedirect,
+  signInWithEmailAndPassword,
   GoogleAuthProvider,
+  createUserWithEmailAndPassword,
 } from 'firebase/auth';
 import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
 
@@ -25,42 +27,61 @@ googleProvider.setCustomParameters({
   prompt: 'select_account',
 });
 
-// Sign in with google
+// Sign in with Google
 const auth = getAuth();
 const signInWithGooglePopup = () => signInWithPopup(auth, googleProvider);
 const signInWithGoogleRedirect = () => signInWithRedirect(auth, googleProvider);
 
-// Create user document and save to firestore
+// Save user info from signing up using Google auth
 const db = getFirestore();
-const createUserDocumentFromAuth = async (userAuth) => {
-  const userDocRef = await doc(db, 'users', userAuth.uid);
-  const userSnapshot = await getDoc(userDocRef);
+const createUserDocumentFromAuth = async (userAuth, additionalInfo = {}) => {
+  if (userAuth) {
+    const userDocRef = await doc(db, 'users', userAuth.uid);
+    const userSnapshot = await getDoc(userDocRef);
 
-  if (!userSnapshot.exists()) {
-    const { displayName, email } = userAuth;
-    const createdAt = new Date();
+    if (!userSnapshot.exists()) {
+      const { displayName, email } = userAuth;
+      const createdAt = new Date();
 
-    try {
-      await setDoc(userDocRef, {
-        displayName,
-        email,
-        createdAt,
-      });
-    } catch (error) {
-      throw new Error(
-        'Error when creating user from authentication',
-        error.message
-      );
+      try {
+        await setDoc(userDocRef, {
+          displayName,
+          email,
+          createdAt,
+          ...additionalInfo,
+        });
+      } catch (error) {
+        console.error(
+          'An error occurred while creating user from Google authentication',
+          error.message
+        );
+      }
     }
-  }
 
-  return userDocRef;
+    return userDocRef;
+  }
+};
+
+// Save user info from signing up using email and password
+const createAuthUserWithEmailAndPassword = async (email, password) => {
+  if (email && password) {
+    return await createUserWithEmailAndPassword(auth, email, password);
+  }
+};
+
+// Sign in user with email and password
+const signInAuthUserWithEmailAndPassword = async (email, password) => {
+  if (email && password) {
+    return await signInWithEmailAndPassword(auth, email, password);
+  }
 };
 
 export {
   auth,
   signInWithGooglePopup,
   db,
-  createUserDocumentFromAuth,
   signInWithGoogleRedirect,
+  signInAuthUserWithEmailAndPassword,
+  createUserDocumentFromAuth,
+  createAuthUserWithEmailAndPassword,
 };

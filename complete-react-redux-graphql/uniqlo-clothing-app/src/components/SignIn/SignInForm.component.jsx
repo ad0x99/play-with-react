@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+import { UserContext } from '../../context/user.context';
 import { signInDefaultFormFields } from '../../utils/Constants/form.constant';
 import throwAuthenticationError from '../../utils/Error/authenticationError.utils';
 import {
@@ -13,6 +14,8 @@ import './SignInForm.styles.scss';
 const SignInForm = () => {
   const [formFields, setFormFields] = useState(signInDefaultFormFields);
   const { email, password } = formFields;
+
+  const { setCurrentUser } = useContext(UserContext);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -32,13 +35,18 @@ const SignInForm = () => {
     event.preventDefault();
 
     try {
-      await signInAuthUserWithEmailAndPassword(email, password);
+      const { user } = await signInAuthUserWithEmailAndPassword(
+        email,
+        password
+      );
 
+      setCurrentUser(user);
       resetFormFields();
     } catch (error) {
       throwAuthenticationError(error);
     }
   };
+
   return (
     <div className="sign-up-container">
       <h2>Already have an account?</h2>

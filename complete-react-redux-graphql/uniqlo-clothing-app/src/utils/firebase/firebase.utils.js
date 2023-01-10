@@ -7,6 +7,7 @@ import {
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
   signOut,
+  onAuthStateChanged,
 } from 'firebase/auth';
 import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
 
@@ -82,6 +83,12 @@ const signOutUser = async () => {
   await signOut(auth);
 };
 
+// Authentication change listener to keep track user state
+const onAuthStateChangedListener = (callback) => {
+  if (callback) {
+    onAuthStateChanged(auth, callback);
+  }
+};
 export {
   auth,
   db,
@@ -91,4 +98,5 @@ export {
   signOutUser,
   createUserDocumentFromAuth,
   createAuthUserWithEmailAndPassword,
+  onAuthStateChangedListener,
 };

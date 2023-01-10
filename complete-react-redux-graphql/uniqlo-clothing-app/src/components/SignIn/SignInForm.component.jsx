@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { signInDefaultFormFields } from '../../utils/Constants/form.constant';
-import throwAuthenticationError from '../../utils/Error/authenticationError.utils';
+import { throwAuthenticationError } from '../../utils/Error/authenticationError.utils';
 import {
   signInAuthUserWithEmailAndPassword,
   signInWithGooglePopup,

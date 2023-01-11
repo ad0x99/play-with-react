@@ -1,6 +1,8 @@
 import { Fragment, useContext } from 'react';
 import { Link, Outlet } from 'react-router-dom';
 import { ReactComponent as UniqloLogo } from '../../assets/uniqlo.svg';
+import CardDropDown from '../../components/CardDropDown/CardDropDown.component';
+import CardIcon from '../../components/CardIcon/CardIcon.component';
 import { UserContext } from '../../context/user.context';
 import { signOutUser } from '../../utils/firebase/firebase.utils';
 import './Navigation.styles.scss';
@@ -29,7 +31,10 @@ const Navigation = () => {
               SIGN IN
             </Link>
           )}
+
+          <CardIcon />
         </div>
+        <CardDropDown />
       </div>
       <Outlet />
     </Fragment>

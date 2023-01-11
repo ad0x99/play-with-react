@@ -3,12 +3,14 @@ import { Link, Outlet } from 'react-router-dom';
 import { ReactComponent as UniqloLogo } from '../../assets/uniqlo.svg';
 import CardDropDown from '../../components/CardDropDown/CardDropDown.component';
 import CardIcon from '../../components/CardIcon/CardIcon.component';
+import { CartContext } from '../../context/cart.context';
 import { UserContext } from '../../context/user.context';
 import { signOutUser } from '../../utils/firebase/firebase.utils';
 import './Navigation.styles.scss';
 
 const Navigation = () => {
   const { currentUser } = useContext(UserContext);
+  const { isCartOpen } = useContext(CartContext);
 
   return (
     <Fragment>
@@ -34,7 +36,7 @@ const Navigation = () => {
 
           <CardIcon />
         </div>
-        <CardDropDown />
+        {isCartOpen && <CardDropDown />}
       </div>
       <Outlet />
     </Fragment>

@@ -89,6 +89,7 @@ const onAuthStateChangedListener = (callback) => {
     onAuthStateChanged(auth, callback);
   }
 };
+
 export {
   auth,
   db,

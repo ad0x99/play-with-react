@@ -1,5 +1,6 @@
 const PRODUCTS = [
   {
+    id: 1,
     title: 'Hats',
     items: [
       {
@@ -59,6 +60,7 @@ const PRODUCTS = [
     ],
   },
   {
+    id: 2,
     title: 'Sneakers',
     items: [
       {

@@ -1,8 +1,8 @@
 import { Fragment, useContext } from 'react';
-import { Link, Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import { ReactComponent as UniqloLogo } from '../../assets/uniqlo.svg';
-import CardDropDown from '../../components/CardDropDown/CardDropDown.component';
-import CardIcon from '../../components/CardIcon/CardIcon.component';
+import CartDropDown from '../../components/CartDropDown/CartDropDown.component';
+import CartIcon from '../../components/CartIcon/CartIcon.component';
 import { CartContext } from '../../context/cart.context';
 import { UserContext } from '../../context/user.context';
 import { signOutUser } from '../../utils/firebase/firebase.utils';
@@ -35,9 +35,9 @@ const Navigation = () => {
             <NavLink to="/auth">SIGN IN</NavLink>
           )}
 
-          <CardIcon />
+          <CartIcon />
         </NavLinkContainer>
-        {isCartOpen && <CardDropDown />}
+        {isCartOpen && <CartDropDown />}
       </NavigationContainer>
       <Outlet />
     </Fragment>

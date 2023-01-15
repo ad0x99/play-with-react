@@ -26,7 +26,7 @@ const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => {
 const getCategoriesAndDocuments = async () => {
   const collectionRef = collection(
     db,
-    process.env.REACT_APP_FIREBASE_COLLECTION_NAME
+    process.env.REACT_APP_FIREBASE_CATEGORIES_NAME
   );
   const q = query(collectionRef);
 
@@ -41,4 +41,25 @@ const getCategoriesAndDocuments = async () => {
   return categoryMapper;
 };
 
-export { addCollectionAndDocuments, getCategoriesAndDocuments };
+const getHomeCategoriesAndDocuments = async () => {
+  const collectionRef = collection(
+    db,
+    process.env.REACT_APP_FIREBASE_HOME_CATEGORIES_NAME
+  );
+  const q = query(collectionRef);
+
+  const categoriesList = [];
+  const querySnapshot = await getDocs(q);
+  querySnapshot.docs.reduce((_, docSnapshot) => {
+    const data = docSnapshot.data();
+    return categoriesList.push(data);
+  }, {});
+
+  return categoriesList;
+};
+
+export {
+  addCollectionAndDocuments,
+  getCategoriesAndDocuments,
+  getHomeCategoriesAndDocuments,
+};

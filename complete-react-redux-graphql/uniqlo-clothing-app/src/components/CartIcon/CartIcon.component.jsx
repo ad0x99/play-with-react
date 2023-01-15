@@ -1,8 +1,8 @@
 import { useContext } from 'react';
 import { CartContext } from '../../context/cart.context';
-import { CartIconContainer, ItemCount, ShoppingIcon } from './CardIcon.styles';
+import { CartIconContainer, ItemCount, ShoppingIcon } from './CartIcon.styles';
 
-const CardIcon = () => {
+const CartIcon = () => {
   const { isCartOpen, setIsCartOpen, cartCount } = useContext(CartContext);
 
   const toggleIsCartOpen = () => setIsCartOpen(!isCartOpen);
@@ -15,4 +15,4 @@ const CardIcon = () => {
   );
 };
 
-export default CardIcon;
+export default CartIcon;

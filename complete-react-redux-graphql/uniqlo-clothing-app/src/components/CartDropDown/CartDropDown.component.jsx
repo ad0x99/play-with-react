@@ -2,15 +2,14 @@ import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CartContext } from '../../context/cart.context';
 import { Button } from '../Button/Button.component';
-import CartItem from '../CardItem/CardItem.component';
-import './CardDropDown.styles.jsx';
+import CartItem from '../CartItem/CartItem.component';
 import {
   CartDropdownContainer,
   EmptyMessage,
   CartItems,
-} from './CardDropDown.styles.jsx';
+} from './CartDropDown.styles.jsx';
 
-const CardDropDown = () => {
+const CartDropDown = () => {
   const { cartItems } = useContext(CartContext);
   const navigate = useNavigate();
 
@@ -32,4 +31,4 @@ const CardDropDown = () => {
   );
 };
 
-export default CardDropDown;
+export default CartDropDown;

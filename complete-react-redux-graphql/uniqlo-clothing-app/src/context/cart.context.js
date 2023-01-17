@@ -62,16 +62,6 @@ const clearCartItem = (cartItems, cartItemToClear) => {
   return cartItems.filter((cartItem) => cartItem.id !== cartItemToClear.id);
 };
 
-const CartContext = createContext({
-  isCartOpen: true,
-  setIsCartOpen: () => {},
-  cartItems: [],
-  addItemToCart: () => {},
-  clearItemFromCart: () => {},
-  cartCount: 0,
-  cartTotal: 0,
-});
-
 const INITIAL_STATE = {
   isCartOpen: false,
   cartItems: [],
@@ -99,6 +89,16 @@ const cartReducer = (state, action) => {
       throw new Error(`Unhandled type of ${type} in cartReducer`);
   }
 };
+
+const CartContext = createContext({
+  isCartOpen: false,
+  setIsCartOpen: () => {},
+  cartItems: [],
+  addItemToCart: () => {},
+  clearItemFromCart: () => {},
+  cartCount: 0,
+  cartTotal: 0,
+});
 
 const CartProvider = ({ children }) => {
   const [state, dispatch] = useReducer(cartReducer, INITIAL_STATE);

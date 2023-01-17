@@ -6,10 +6,9 @@ import {
 } from '../utils/firebase/firebase.utils';
 import { createAction } from '../utils/reducer/reducer.utils';
 
-const UserContext = createContext({
+const INITIAL_STATE = {
   currentUser: null,
-  setCurrentUser: () => null,
-});
+};
 
 const userReducer = (state, action) => {
   const { type, payload } = action;
@@ -26,9 +25,10 @@ const userReducer = (state, action) => {
   }
 };
 
-const INITIAL_STATE = {
+const UserContext = createContext({
   currentUser: null,
-};
+  setCurrentUser: () => null,
+});
 
 const UserProvider = ({ children }) => {
   const [state, dispatch] = useReducer(userReducer, INITIAL_STATE);

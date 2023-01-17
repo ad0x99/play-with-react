@@ -1,15 +1,26 @@
-import { useContext, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
 import DirectoryItem from '../DirectoryItem/DirectoryItem.component';
 import { DirectoryContainer } from './Directory.styles.jsx';
-import { CategoriesContext } from '../../context/category.context.js';
+import { selectHomeCategoriesMap } from '../../store/categories/category.selector';
+import { useEffect } from 'react';
+import { getHomeCategoriesAndDocuments } from '../../utils/firebase/product.utils';
+import { setHomeCategoriesMap } from '../../store/categories/category.action';
 
 const Directory = () => {
-  const { homeCategoriesMap } = useContext(CategoriesContext);
-  const [homeCategories, setHomeCategories] = useState([]);
+  const dispatch = useDispatch();
+  const homeCategories = useSelector(selectHomeCategoriesMap);
 
   useEffect(() => {
-    setHomeCategories(homeCategoriesMap);
-  }, [homeCategoriesMap]);
+    const getHomeCategoriesMap = async () => {
+      const data = await getHomeCategoriesAndDocuments(
+        process.env.REACT_APP_FIREBASE_HOME_CATEGORIES_NAME
+      );
+      dispatch(setHomeCategoriesMap(data));
+    };
+
+    getHomeCategoriesMap();
+  }, [dispatch]);
 
   return (
     <DirectoryContainer>

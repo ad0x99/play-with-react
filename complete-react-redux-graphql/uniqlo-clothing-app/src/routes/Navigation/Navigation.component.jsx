@@ -1,11 +1,10 @@
-import { Fragment, useContext } from 'react';
+import { Fragment } from 'react';
 import { Outlet } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import { ReactComponent as UniqloLogo } from '../../assets/uniqlo.svg';
 import CartDropDown from '../../components/CartDropDown/CartDropDown.component';
 import CartIcon from '../../components/CartIcon/CartIcon.component';
-import { CartContext } from '../../context/cart.context';
 import { signOutUser } from '../../utils/firebase/firebase.utils';
 import {
   NavigationContainer,
@@ -14,10 +13,11 @@ import {
   NavLink,
 } from './Navigation.styles.jsx';
 import { selectCurrentUser } from '../../store/user/user.selector';
+import { selectIsCartOpen } from '../../store/cart/cart.selector';
 
 const Navigation = () => {
   const currentUser = useSelector(selectCurrentUser);
-  const { isCartOpen } = useContext(CartContext);
+  const isCartOpen = useSelector(selectIsCartOpen);
 
   return (
     <Fragment>

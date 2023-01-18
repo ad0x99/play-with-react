@@ -1,5 +1,15 @@
-const selectCategoriesMap = (state) => state.categories.categoriesMap;
+const selectCategoriesArray = (state) => {
+  const categories = state.categories.categoriesArray.reduce(
+    (acc, { title, items }) => {
+      acc[title.toLowerCase()] = items;
+      return acc;
+    },
+    {}
+  );
+  return categories;
+};
 
-const selectHomeCategoriesMap = (state) => state.categories.homeCategoriesMap;
+const selectHomeCategoriesArray = (state) =>
+  state.categories.homeCategoriesArray;
 
-export { selectCategoriesMap, selectHomeCategoriesMap };
+export { selectCategoriesArray, selectHomeCategoriesArray };

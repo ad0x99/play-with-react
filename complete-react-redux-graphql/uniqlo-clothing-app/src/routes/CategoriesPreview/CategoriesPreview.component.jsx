@@ -2,10 +2,10 @@ import { Fragment } from 'react';
 import { useSelector } from 'react-redux';
 
 import CategoryPreview from '../../components/CategoryPreview/CategoryPreview.component';
-import { selectCategoriesArray } from '../../store/categories/category.selector';
+import { selectCategoriesMap } from '../../store/categories/category.selector';
 
 const CategoriesPreview = () => {
-  const categoriesArray = useSelector(selectCategoriesArray);
+  const categoriesArray = useSelector(selectCategoriesMap);
 
   return (
     <Fragment>

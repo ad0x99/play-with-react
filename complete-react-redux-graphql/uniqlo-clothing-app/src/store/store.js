@@ -17,7 +17,16 @@ const middlewares = [
   process.env.REACT_APP_ENVIRONMENT === 'dev' && logger,
 ].filter(Boolean);
 
-const composedEnhancers = compose(applyMiddleware(...middlewares));
+/**
+ * Redux Devtools is not Allowed in the production environment
+ */
+const composeEnhancer =
+  (process.env.REACT_APP_ENVIRONMENT !== 'prod' &&
+    window &&
+    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ||
+  compose;
+
+const composedEnhancers = composeEnhancer(applyMiddleware(...middlewares));
 
 const store = createStore(persistedReducer, undefined, composedEnhancers);
 

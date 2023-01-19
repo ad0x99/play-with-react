@@ -13,7 +13,9 @@ const persistConfig = {
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-const middlewares = [logger];
+const middlewares = [
+  process.env.REACT_APP_ENVIRONMENT === 'dev' && logger,
+].filter(Boolean);
 
 const composedEnhancers = compose(applyMiddleware(...middlewares));
 

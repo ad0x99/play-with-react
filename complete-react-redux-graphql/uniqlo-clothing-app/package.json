@@ -13,10 +13,11 @@
     "react-router-dom": "^6.6.1",
     "react-scripts": "5.0.1",
     "redux": "^4.2.0",
-    "redux-logger": "^3.0.6",
     "sass": "^1.57.1",
     "styled-components": "^5.3.6",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "redux-persist": "^6.0.0",
+    "reselect": "^4.1.7"
   },
   "scripts": {
     "start": "infisical run -- react-scripts start",
@@ -43,6 +44,6 @@
     ]
   },
   "devDependencies": {
-    "reselect": "^4.1.7"
+    "redux-logger": "^3.0.6"
   }
 }

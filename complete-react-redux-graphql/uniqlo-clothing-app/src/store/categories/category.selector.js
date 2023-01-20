@@ -33,4 +33,13 @@ const selectHomeCategoriesArray = createSelector(
   }
 );
 
-export { selectCategoriesMap, selectHomeCategoriesArray };
+const selectCategoriesIsLoading = createSelector(
+  [selectCategoryReducer],
+  (categories) => categories.isLoading
+);
+
+export {
+  selectCategoriesMap,
+  selectHomeCategoriesArray,
+  selectCategoriesIsLoading,
+};

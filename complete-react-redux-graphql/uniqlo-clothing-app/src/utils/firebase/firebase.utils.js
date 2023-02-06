@@ -90,6 +90,19 @@ const onAuthStateChangedListener = (callback) => {
   }
 };
 
+const getCurrentUser = async () => {
+  return new Promise((resolve, reject) => {
+    const unsubscribe = onAuthStateChanged(
+      auth,
+      (userAuth) => {
+        unsubscribe();
+        resolve(userAuth);
+      },
+      reject
+    );
+  });
+};
+
 export {
   auth,
   db,
@@ -100,4 +113,5 @@ export {
   createUserDocumentFromAuth,
   createAuthUserWithEmailAndPassword,
   onAuthStateChangedListener,
+  getCurrentUser,
 };

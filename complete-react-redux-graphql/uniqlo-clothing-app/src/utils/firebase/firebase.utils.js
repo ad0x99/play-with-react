@@ -90,6 +90,7 @@ const onAuthStateChangedListener = (callback) => {
   }
 };
 
+// Get current user state
 const getCurrentUser = async () => {
   return new Promise((resolve, reject) => {
     const unsubscribe = onAuthStateChanged(

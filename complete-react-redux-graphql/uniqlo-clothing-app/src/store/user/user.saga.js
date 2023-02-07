@@ -3,6 +3,8 @@ import { takeLatest, put, all, call } from 'redux-saga/effects';
 import {
   getCurrentUser,
   createUserDocumentFromAuth,
+  signInWithGooglePopup,
+  signInAuthUserWithEmailAndPassword,
 } from '../../utils/firebase/firebase.utils';
 import { signInFailed, signInSuccess } from './user.action';
 import { USER_ACTION_TYPES } from './user.types';
@@ -16,8 +18,32 @@ function* getSnapshotFromUserAuth(userAuth, additionalDetails) {
     );
 
     yield put(signInSuccess({ id: userSnapshot.id, ...userSnapshot.data }));
-  } catch (e) {
-    yield put(signInFailed(e));
+  } catch (error) {
+    yield put(signInFailed(error));
+  }
+}
+
+function* signInWithGoogle() {
+  try {
+    const { user } = yield call(signInWithGooglePopup);
+
+    yield call(getSnapshotFromUserAuth, user);
+  } catch (error) {
+    yield put(signInFailed(error));
+  }
+}
+
+function* signInWithEmail({ payload: { email, password } }) {
+  try {
+    const { user } = yield call(
+      signInAuthUserWithEmailAndPassword,
+      email,
+      password
+    );
+
+    yield call(getSnapshotFromUserAuth, user);
+  } catch (error) {
+    yield put(signInFailed(error));
   }
 }
 
@@ -28,17 +54,29 @@ function* isUserAuthenticated() {
     if (!userAuth) return;
 
     yield call(getSnapshotFromUserAuth, userAuth);
-  } catch (e) {
-    yield put(signInFailed(e));
+  } catch (error) {
+    yield put(signInFailed(error));
   }
+}
+
+function* onGoogleSignInStart() {
+  yield takeLatest(USER_ACTION_TYPES.GOOGLE_SIGN_IN_START, signInWithGoogle);
 }
 
 function* onCheckUserSession() {
   yield takeLatest(USER_ACTION_TYPES.CHECK_USER_SESSION, isUserAuthenticated);
 }
 
-function* userSagas() {
-  yield all([call(onCheckUserSession)]);
+function* onEmailSignInStart() {
+  yield takeLatest(USER_ACTION_TYPES.EMAIL_SIGN_IN_START, signInWithEmail);
 }
 
-export { userSagas, isUserAuthenticated, onCheckUserSession };
+function* userSagas() {
+  yield all([
+    call(onCheckUserSession),
+    call(onGoogleSignInStart),
+    call(onEmailSignInStart),
+  ]);
+}
+
+export { userSagas };

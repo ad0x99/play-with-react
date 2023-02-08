@@ -1,11 +1,10 @@
 import { Fragment } from 'react';
 import { Outlet } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { ReactComponent as UniqloLogo } from '../../assets/uniqlo.svg';
 import CartDropDown from '../../components/CartDropDown/CartDropDown.component';
 import CartIcon from '../../components/CartIcon/CartIcon.component';
-import { signOutUser } from '../../utils/firebase/firebase.utils';
 import {
   NavigationContainer,
   LogoContainer,
@@ -14,10 +13,14 @@ import {
 } from './Navigation.styles.jsx';
 import { selectCurrentUser } from '../../store/user/user.selector';
 import { selectIsCartOpen } from '../../store/cart/cart.selector';
+import { signOutStart } from '../../store/user/user.action';
 
 const Navigation = () => {
   const currentUser = useSelector(selectCurrentUser);
   const isCartOpen = useSelector(selectIsCartOpen);
+  const dispatch = useDispatch();
+
+  const signOutUser = () => dispatch(signOutStart());
 
   return (
     <Fragment>

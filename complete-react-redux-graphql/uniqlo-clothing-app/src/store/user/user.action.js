@@ -47,6 +47,18 @@ const signUpFailed = (error) => {
   return createAction(USER_ACTION_TYPES.SIGN_UP_FAILED, error);
 };
 
+const signOutStart = () => {
+  return createAction(USER_ACTION_TYPES.SIGN_OUT_START);
+};
+
+const signOutSuccess = () => {
+  return createAction(USER_ACTION_TYPES.SIGN_OUT_SUCCESS);
+};
+
+const signOutFailed = (error) => {
+  return createAction(USER_ACTION_TYPES.SIGN_OUT_FAILED, error);
+};
+
 export {
   setCurrentUser,
   checkUserSession,
@@ -57,4 +69,7 @@ export {
   signUpStart,
   signUpSuccess,
   signUpFailed,
+  signOutStart,
+  signOutSuccess,
+  signOutFailed,
 };

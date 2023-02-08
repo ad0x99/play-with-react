@@ -28,6 +28,25 @@ const signInFailed = (error) => {
   return createAction(USER_ACTION_TYPES.SIGN_IN_FAILED, error);
 };
 
+const signUpStart = (email, password, displayName) => {
+  return createAction(USER_ACTION_TYPES.SIGN_UP_START, {
+    email,
+    password,
+    displayName,
+  });
+};
+
+const signUpSuccess = (user, additionalDetails) => {
+  return createAction(USER_ACTION_TYPES.SIGN_UP_SUCCESS, {
+    user,
+    additionalDetails,
+  });
+};
+
+const signUpFailed = (error) => {
+  return createAction(USER_ACTION_TYPES.SIGN_UP_FAILED, error);
+};
+
 export {
   setCurrentUser,
   checkUserSession,
@@ -35,4 +54,7 @@ export {
   emailSignInStart,
   signInSuccess,
   signInFailed,
+  signUpStart,
+  signUpSuccess,
+  signUpFailed,
 };

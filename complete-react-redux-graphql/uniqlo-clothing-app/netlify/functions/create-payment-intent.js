@@ -1,4 +1,7 @@
-const stripe = require('stripe')(process.env.REACT_APP_STRIPE_SECRET_KEY);
+const Stripe = require('stripe');
+require('dotenv').config();
+
+const stripe = new Stripe(process.env.REACT_APP_STRIPE_SECRET_KEY);
 
 exports.handler = async (event) => {
   try {
@@ -10,13 +13,15 @@ exports.handler = async (event) => {
     });
 
     return {
-      status: 200,
+      statusCode: 200,
       body: JSON.stringify({ paymentIntent }),
     };
   } catch (error) {
     return {
-      status: 400,
-      body: JSON.stringify({ error }),
+      statusCode: 400,
+      body: JSON.stringify({
+        error,
+      }),
     };
   }
 };

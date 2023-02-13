@@ -1,6 +1,8 @@
+import { CategoryMapType } from './category.types';
+import { CategoryState } from './category.reducer';
 import { createSelector } from 'reselect';
 
-const selectCategoryReducer = (state) => {
+const selectCategoryReducer = (state: any): CategoryState => {
   return state.categories;
 };
 
@@ -19,12 +21,15 @@ const selectCategories = createSelector(
  * Then just return the previous values.
  * This will prevent to running unnecessary call to get the data
  */
-const selectCategoriesMap = createSelector([selectCategories], (categories) => {
-  return categories.categoriesArray.reduce((acc, { title, items }) => {
-    acc[title.toLowerCase()] = items;
-    return acc;
-  }, {});
-});
+const selectCategoriesMap = createSelector(
+  [selectCategories],
+  (categories): CategoryMapType => {
+    return categories.categoriesArray.reduce((acc, { title, items }) => {
+      acc[title.toLowerCase()] = items;
+      return acc;
+    }, {} as CategoryMapType);
+  }
+);
 
 const selectHomeCategoriesArray = createSelector(
   [selectCategories],

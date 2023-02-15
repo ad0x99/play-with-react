@@ -8,7 +8,7 @@ import {
   PaymentFormContainer,
 } from './PaymentForm.styles.jsx';
 import { selectCartTotal } from '../../store/cart/cart.selector';
-import { selectCurrentUser } from '../../store/user/user.selector.js';
+import { selectCurrentUser } from '../../store/user/user.selector';
 
 const PaymentForm = () => {
   const stripe = useStripe();

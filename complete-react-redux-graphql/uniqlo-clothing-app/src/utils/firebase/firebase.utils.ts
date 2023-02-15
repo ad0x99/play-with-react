@@ -45,11 +45,11 @@ const signInWithGoogleRedirect = () => signInWithRedirect(auth, googleProvider);
 // Save user info from signing up using Google auth
 const db = getFirestore();
 
-type AdditionalInformation = {
+export type AdditionalInformation = {
   displayName?: string;
 };
 
-type UserData = {
+export type UserData = {
   createAt: Date;
   displayName: string;
   email: string;

@@ -7,7 +7,7 @@ import Checkout from './routes/Checkout/Checkout.component.jsx';
 import Home from './routes/Home/Home.component.jsx';
 import Navigation from './routes/Navigation/Navigation.component.jsx';
 import Shop from './routes/Shop/Shop.component.jsx';
-import { checkUserSession } from './store/user/user.action.js';
+import { checkUserSession } from './store/user/user.action';
 
 const App = () => {
   const dispatch = useDispatch();

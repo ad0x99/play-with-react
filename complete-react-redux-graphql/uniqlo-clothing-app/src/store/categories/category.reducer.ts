@@ -24,10 +24,10 @@ const CATEGORIES_INITIAL_STATE: CategoriesState = {
 
 const categoriesReducer = (
   state = CATEGORIES_INITIAL_STATE,
-  action = {} as AnyAction
+  action: AnyAction
 ): CategoriesState => {
   if (fetchHomeCategoriesSuccess.match(action)) {
-    return { ...state, homeCategoriesArray: action.payload! };
+    return { ...state, homeCategoriesArray: action.payload };
   }
 
   if (fetchCategoriesStart.match(action)) {
@@ -35,11 +35,11 @@ const categoriesReducer = (
   }
 
   if (fetchCategoriesSuccess.match(action)) {
-    return { ...state, categoriesArray: action.payload!, isLoading: false };
+    return { ...state, categoriesArray: action.payload, isLoading: false };
   }
 
   if (fetchCategoriesFailed.match(action)) {
-    return { ...state, error: action.payload!, isLoading: false };
+    return { ...state, error: action.payload, isLoading: false };
   }
 
   return state;

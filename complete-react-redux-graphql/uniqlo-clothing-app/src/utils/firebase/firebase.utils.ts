@@ -8,8 +8,16 @@ import {
   createUserWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
+  User,
+  NextOrObserver,
 } from 'firebase/auth';
-import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  QueryDocumentSnapshot,
+} from 'firebase/firestore';
 
 // Firebase config
 const firebaseConfig = {
@@ -36,7 +44,21 @@ const signInWithGoogleRedirect = () => signInWithRedirect(auth, googleProvider);
 
 // Save user info from signing up using Google auth
 const db = getFirestore();
-const createUserDocumentFromAuth = async (userAuth, additionalInfo = {}) => {
+
+type AdditionalInformation = {
+  displayName?: string;
+};
+
+type UserData = {
+  createAt: Date;
+  displayName: string;
+  email: string;
+};
+
+const createUserDocumentFromAuth = async (
+  userAuth: User,
+  additionalInfo = {} as AdditionalInformation
+): Promise<void | QueryDocumentSnapshot<UserData>> => {
   if (userAuth) {
     const userDocRef = await doc(db, 'users', userAuth.uid);
     const userSnapshot = await getDoc(userDocRef);
@@ -55,24 +77,30 @@ const createUserDocumentFromAuth = async (userAuth, additionalInfo = {}) => {
       } catch (error) {
         console.error(
           'An error occurred while creating user from Google authentication',
-          error.message
+          error
         );
       }
     }
 
-    return userDocRef;
+    return userSnapshot as QueryDocumentSnapshot<UserData>;
   }
 };
 
 // Save user info from signing up using email and password
-const createAuthUserWithEmailAndPassword = async (email, password) => {
+const createAuthUserWithEmailAndPassword = async (
+  email: string,
+  password: string
+) => {
   if (email && password) {
     return await createUserWithEmailAndPassword(auth, email, password);
   }
 };
 
 // Sign in user with email and password
-const signInAuthUserWithEmailAndPassword = async (email, password) => {
+const signInAuthUserWithEmailAndPassword = async (
+  email: string,
+  password: string
+) => {
   if (email && password) {
     return await signInWithEmailAndPassword(auth, email, password);
   }
@@ -84,14 +112,14 @@ const signOutUser = async () => {
 };
 
 // Authentication change listener to keep track user state
-const onAuthStateChangedListener = (callback) => {
+const onAuthStateChangedListener = (callback: NextOrObserver<User>) => {
   if (callback) {
     onAuthStateChanged(auth, callback);
   }
 };
 
 // Get current user state
-const getCurrentUser = async () => {
+const getCurrentUser = async (): Promise<User | null> => {
   return new Promise((resolve, reject) => {
     const unsubscribe = onAuthStateChanged(
       auth,

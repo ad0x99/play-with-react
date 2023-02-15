@@ -7,7 +7,7 @@ import {
   PaymentButton,
   PaymentFormContainer,
 } from './PaymentForm.styles.jsx';
-import { selectCartTotal } from '../../store/cart/cart.selector.js';
+import { selectCartTotal } from '../../store/cart/cart.selector';
 import { selectCurrentUser } from '../../store/user/user.selector.js';
 
 const PaymentForm = () => {

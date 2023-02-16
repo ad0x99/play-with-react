@@ -1,3 +1,5 @@
+import { User } from 'firebase/auth';
+
 import {
   UserData,
   AdditionalInformation,
@@ -45,7 +47,7 @@ export type SignInFailed = ActionWithPayload<
 
 export type SignUpSuccess = ActionWithPayload<
   USER_ACTION_TYPES.SIGN_UP_SUCCESS,
-  { user: UserData; additionalDetails: AdditionalInformation }
+  { user: User; additionalDetails: AdditionalInformation }
 >;
 
 export type SignUpStart = ActionWithPayload<

@@ -36,7 +36,7 @@ const sagaMiddleware = createSagaMiddleware();
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const middlewares = [
-  process.env.REACT_APP_ENVIRONMENT === 'prod' && logger,
+  process.env.REACT_APP_ENVIRONMENT !== 'prod' && logger,
   // thunk,
   sagaMiddleware,
 ].filter((middleware): middleware is Middleware => Boolean(middleware));

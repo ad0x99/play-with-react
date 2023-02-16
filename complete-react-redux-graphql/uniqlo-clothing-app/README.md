@@ -1,3 +1,7 @@
+# Preview
+
+- To see deployed version of this project, please [click me](https://uniqlo-clothing.netlify.app/)
+
 # How to run the application
 
 1. Install Dependencies

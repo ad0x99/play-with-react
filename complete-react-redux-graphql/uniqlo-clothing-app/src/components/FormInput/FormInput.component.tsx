@@ -4,9 +4,10 @@ import { FormInputLabel, Group, Input } from './FormInput.styles';
 
 type FormInputProps = {
   label: string;
-} & InputHTMLAttributes<HTMLInputElement>;
+  inputOptions: InputHTMLAttributes<HTMLInputElement>;
+};
 
-const FormInput: FC<FormInputProps> = ({ label, ...inputOptions }) => {
+const FormInput: FC<FormInputProps> = ({ label, inputOptions }) => {
   return (
     <Group className="group">
       <Input {...inputOptions} />

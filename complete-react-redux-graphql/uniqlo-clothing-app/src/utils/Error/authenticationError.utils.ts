@@ -1,18 +1,19 @@
-import { AUTHENTICATION_ERROR_CODE } from '../Constants/error.constant';
+import { AuthError, AuthErrorCodes } from 'firebase/auth';
 
 // Authentication error handler
-const throwAuthenticationError = (error) => {
+const throwAuthenticationError = (error: AuthError) => {
   switch (error.code) {
-    case AUTHENTICATION_ERROR_CODE.invalidUserNameOrPassword:
+    case AuthErrorCodes.INVALID_PASSWORD:
+    case AuthErrorCodes.INVALID_EMAIL:
       alert('Incorrect email or password. Please try again');
       break;
-    case AUTHENTICATION_ERROR_CODE.userDoesNotExist:
+    case AuthErrorCodes.USER_DELETED:
       alert('User does not exist. Please try again');
       break;
-    case AUTHENTICATION_ERROR_CODE.emailAlreadyExists:
+    case AuthErrorCodes.EMAIL_EXISTS:
       alert('Email already in use');
       break;
-    case AUTHENTICATION_ERROR_CODE.invalidPasswordLength:
+    case AuthErrorCodes.WEAK_PASSWORD:
       alert('Password should be at least 6 characters');
       break;
 

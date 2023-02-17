@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { AuthError } from 'firebase/auth';
+import { useState, FormEvent, ChangeEvent } from 'react';
 import { useDispatch } from 'react-redux';
 
 import {
@@ -9,14 +10,14 @@ import { signInDefaultFormFields } from '../../utils/Constants/form.constant';
 import { throwAuthenticationError } from '../../utils/Error/authenticationError.utils';
 import { Button, BUTTON_TYPES } from '../Button/Button.component';
 import FormInput from '../FormInput/FormInput.component';
-import { SignInContainer } from './SignInForm.styles.jsx';
+import { SignInContainer, ButtonsContainer } from './SignInForm.styles';
 
 const SignInForm = () => {
   const [formFields, setFormFields] = useState(signInDefaultFormFields);
   const dispatch = useDispatch();
   const { email, password } = formFields;
 
-  const handleChange = (event) => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setFormFields({ ...formFields, [name]: value });
   };
@@ -29,14 +30,14 @@ const SignInForm = () => {
     setFormFields(signInDefaultFormFields);
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     try {
       dispatch(emailSignInStart(email, password));
       resetFormFields();
     } catch (error) {
-      throwAuthenticationError(error);
+      throwAuthenticationError(error as AuthError);
     }
   };
 
@@ -45,7 +46,7 @@ const SignInForm = () => {
       <h2>Already have an account?</h2>
       <span>Sign in with your email and password</span>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={() => handleSubmit}>
         <FormInput
           label="Email"
           inputOptions={{
@@ -70,7 +71,7 @@ const SignInForm = () => {
           }}
         />
 
-        <div className="buttons-container">
+        <ButtonsContainer>
           <Button type="submit">Sign In</Button>
 
           <Button
@@ -80,7 +81,7 @@ const SignInForm = () => {
           >
             Google Sign In
           </Button>
-        </div>
+        </ButtonsContainer>
       </form>
     </SignInContainer>
   );

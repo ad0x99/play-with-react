@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { AuthError } from 'firebase/auth';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { signUpStart } from '../../store/user/user.action';
 
@@ -8,14 +9,14 @@ import { throwAuthenticationError } from '../../utils/Error/authenticationError.
 import { Button, BUTTON_TYPES } from '../Button/Button.component';
 import FormInput from '../FormInput/FormInput.component';
 
-import { SignUpContainer } from './SignUpForm.styles.jsx';
+import { SignUpContainer } from './SignUpForm.styles';
 
 const SignUpForm = () => {
   const [formFields, setFormFields] = useState(signUpDefaultFormFields);
   const { displayName, email, password, confirmPassword } = formFields;
   const dispatch = useDispatch();
 
-  const handleChange = (event) => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setFormFields({ ...formFields, [name]: value });
   };
@@ -24,7 +25,7 @@ const SignUpForm = () => {
     setFormFields(signUpDefaultFormFields);
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (password !== confirmPassword) {
@@ -36,7 +37,7 @@ const SignUpForm = () => {
 
       resetFormFields();
     } catch (error) {
-      throwAuthenticationError(error);
+      throwAuthenticationError(error as AuthError);
     }
   };
 

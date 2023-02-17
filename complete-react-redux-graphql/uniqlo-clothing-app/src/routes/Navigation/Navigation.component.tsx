@@ -10,7 +10,7 @@ import {
   LogoContainer,
   NavLinkContainer,
   NavLink,
-} from './Navigation.styles.js';
+} from './Navigation.styles';
 import { selectCurrentUser } from '../../store/user/user.selector';
 import { selectIsCartOpen } from '../../store/cart/cart.selector';
 import { signOutStart } from '../../store/user/user.action';

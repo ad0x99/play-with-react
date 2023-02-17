@@ -2,11 +2,11 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Routes, Route } from 'react-router-dom';
 
-import Authentication from './routes/Authentication/Authentication.component.jsx';
-import Checkout from './routes/Checkout/Checkout.component.jsx';
-import Home from './routes/Home/Home.component.jsx';
-import Navigation from './routes/Navigation/Navigation.component.jsx';
-import Shop from './routes/Shop/Shop.component.jsx';
+import Authentication from './routes/Authentication/Authentication.component';
+import Checkout from './routes/Checkout/Checkout.component';
+import Home from './routes/Home/Home.component';
+import Navigation from './routes/Navigation/Navigation.component';
+import Shop from './routes/Shop/Shop.component';
 import { checkUserSession } from './store/user/user.action';
 
 const App = () => {

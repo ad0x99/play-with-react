@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 
 import DirectoryItem from '../DirectoryItem/DirectoryItem.component';
-import { DirectoryContainer } from './Directory.styles.jsx';
+import { DirectoryContainer } from './Directory.styles';
 import { selectHomeCategoriesArray } from '../../store/categories/category.selector';
 import { useEffect } from 'react';
 import { getHomeCategoriesAndDocuments } from '../../utils/firebase/product.utils';
@@ -13,9 +13,7 @@ const Directory = () => {
 
   useEffect(() => {
     const getHomeCategoriesArray = async () => {
-      const data = await getHomeCategoriesAndDocuments(
-        process.env.REACT_APP_FIREBASE_HOME_CATEGORIES_NAME
-      );
+      const data = await getHomeCategoriesAndDocuments();
       dispatch(fetchHomeCategoriesSuccess(data));
     };
 

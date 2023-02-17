@@ -7,7 +7,7 @@ import { addCollectionAndDocuments } from '../utils/firebase/product.utils';
 const DataMigration = () => {
   useEffect(() => {
     addCollectionAndDocuments(
-      process.env.REACT_APP_FIREBASE_HOME_CATEGORIES_NAME,
+      process.env.REACT_APP_FIREBASE_HOME_CATEGORIES_NAME as string,
       categories
     );
   }, []);
@@ -15,7 +15,7 @@ const DataMigration = () => {
   // Migrate products data to firestore
   useEffect(() => {
     addCollectionAndDocuments(
-      process.env.REACT_APP_FIREBASE_CATEGORIES_NAME,
+      process.env.REACT_APP_FIREBASE_CATEGORIES_NAME as string,
       PRODUCTS
     );
   }, []);

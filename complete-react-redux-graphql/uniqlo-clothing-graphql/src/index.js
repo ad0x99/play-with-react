@@ -1,7 +1,10 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
+<<<<<<< HEAD
 import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
+=======
+>>>>>>> 0a1bf6d (feat(uniqlo-graphql): initialize app)
 
 import App from './App';
 import { UserProvider } from './contexts/user.context';

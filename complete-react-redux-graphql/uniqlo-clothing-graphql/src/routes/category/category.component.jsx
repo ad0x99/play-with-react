@@ -2,7 +2,10 @@ import { useContext, useState, useEffect, Fragment } from 'react';
 import { useParams } from 'react-router-dom';
 
 import ProductCard from '../../components/product-card/product-card.component';
+<<<<<<< HEAD
 import Spinner from '../../components/spinner/spinner.component';
+=======
+>>>>>>> 0a1bf6d (feat(uniqlo-graphql): initialize app)
 
 import { CategoriesContext } from '../../contexts/categories.context';
 

@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, memo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
@@ -14,7 +14,11 @@ type CheckoutItemProps = {
   cartItem: CartItem;
 };
 
-const CheckoutItem: FC<CheckoutItemProps> = ({ cartItem }) => {
+/**
+ * Memoizing cartItem to reduce re-rendering
+ * process when we take action on the same items
+ */
+const CheckoutItem: FC<CheckoutItemProps> = memo(({ cartItem }) => {
   const { name, imageUrl, price, quantity } = cartItem;
   const dispatch = useDispatch();
   const cartItems = useSelector(selectCartItems);
@@ -48,6 +52,6 @@ const CheckoutItem: FC<CheckoutItemProps> = ({ cartItem }) => {
       </div>
     </CheckoutItemContainer>
   );
-};
+});
 
 export default CheckoutItem;

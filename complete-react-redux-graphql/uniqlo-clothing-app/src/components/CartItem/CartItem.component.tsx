@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, memo } from 'react';
 
 import { CartItemContainer, Image, ItemDetails } from './CartItem.styles';
 import { CartItem as TCartItem } from '../../store/cart/cart.types';
@@ -7,7 +7,12 @@ type CartItemProps = {
   cartItem: TCartItem;
 };
 
-const CartItem: FC<CartItemProps> = ({ cartItem }) => {
+/**
+ * Memoizing cartItem to reduce re-rendering
+ * process when we add new items to the checkout
+ * list
+ */
+const CartItem: FC<CartItemProps> = memo(({ cartItem }) => {
   const { name, quantity, imageUrl, price } = cartItem;
 
   return (
@@ -22,6 +27,6 @@ const CartItem: FC<CartItemProps> = ({ cartItem }) => {
       </ItemDetails>
     </CartItemContainer>
   );
-};
+});
 
 export default CartItem;

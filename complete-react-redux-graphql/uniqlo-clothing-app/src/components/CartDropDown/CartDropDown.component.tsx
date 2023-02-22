@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
@@ -14,9 +15,13 @@ const CartDropDown = () => {
   const cartItems = useSelector(selectCartItems);
   const navigate = useNavigate();
 
-  const goToCheckoutHandler = () => {
+  /**
+   * use useCallback to return a memoized function
+   * that only changes when navigate has changed
+   */
+  const goToCheckoutHandler = useCallback(() => {
     navigate('/checkout');
-  };
+  }, [navigate]);
 
   return (
     <CartDropdownContainer>

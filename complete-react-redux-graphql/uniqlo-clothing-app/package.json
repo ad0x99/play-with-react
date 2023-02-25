@@ -47,7 +47,8 @@
   },
   "scripts": {
     "start": "infisical run -- react-scripts start",
-    "build": "infisical run -- react-scripts build",
+    "build": "react-scripts build",
+    "build:dev": "infisical run -- react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

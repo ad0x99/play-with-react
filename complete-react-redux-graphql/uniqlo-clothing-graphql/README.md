@@ -1,4 +1,4 @@
-# Uniqlo App with Redux Toolkit - Source Tree
+# Uniqlo Clothing Graphql - Source Tree
 
 - **public**
   - [\_redirects](public/_redirects)
@@ -10,6 +10,7 @@
   - [robots.txt](public/robots.txt)
 - **src**
   - [App.js](src/App.js)
+  - [App.test.js](src/App.test.js)
   - **assets**
     - [crown.svg](src/assets/crown.svg)
     - [shopping\-bag.svg](src/assets/shopping-bag.svg)
@@ -50,6 +51,13 @@
     - **sign\-up\-form**
       - [sign\-up\-form.component.jsx](src/components/sign-up-form/sign-up-form.component.jsx)
       - [sign\-up\-form.styles.jsx](src/components/sign-up-form/sign-up-form.styles.jsx)
+    - **spinner**
+      - [spinner.component.jsx](src/components/spinner/spinner.component.jsx)
+      - [spinner.styles.jsx](src/components/spinner/spinner.styles.jsx)
+  - **contexts**
+    - [cart.context.jsx](src/contexts/cart.context.jsx)
+    - [categories.context.jsx](src/contexts/categories.context.jsx)
+    - [user.context.jsx](src/contexts/user.context.jsx)
   - [index.js](src/index.js)
   - [index.scss](src/index.scss)
   - [logo.svg](src/logo.svg)
@@ -73,25 +81,11 @@
       - [navigation.styles.jsx](src/routes/navigation/navigation.styles.jsx)
     - **shop**
       - [shop.component.jsx](src/routes/shop/shop.component.jsx)
+  - [routes.js](src/routes.js)
   - [setupTests.js](src/setupTests.js)
   - [shop\-data.js](src/shop-data.js)
-  - **store**
-    - **cart**
-      - [cart.reducer.js](src/store/cart/cart.reducer.js)
-      - [cart.selector.js](src/store/cart/cart.selector.js)
-    - **categories**
-      - [category.reducer.js](src/store/categories/category.reducer.js)
-      - [category.selector.js](src/store/categories/category.selector.js)
-    - **middleware**
-      - [logger.js](src/store/middleware/logger.js)
-    - [root\-reducer.js](src/store/root-reducer.js)
-    - [store.js](src/store/store.js)
-    - **user**
-      - [user.reducer.js](src/store/user/user.reducer.js)
-      - [user.selector.js](src/store/user/user.selector.js)
   - **utils**
     - **firebase**
       - [firebase.utils.js](src/utils/firebase/firebase.utils.js)
-    - **reducer**
-      - [reducer.utils.js](src/utils/reducer/reducer.utils.js)
+- [package.json](package.json)
 - [yarn.lock](yarn.lock)

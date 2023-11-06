@@ -1,3 +1,3 @@
 # Play With React
 
-- My collection of react learning process
+- My playground of learning React-related things

@@ -1,0 +1,8 @@
+// Configurations
+const GITHUB_TOKEN = process.env.REACT_APP_GITHUB_TOKEN;
+const GITHUB_API_VERSION = process.env.REACT_APP_GITHUB_API_VERSION;
+
+// APIs
+const USERS_PATH = process.env.REACT_APP_GITHUB_USERS_PATH;
+
+export { GITHUB_TOKEN, GITHUB_API_VERSION, USERS_PATH };

@@ -17,6 +17,7 @@ const GithubContext = createContext();
 const GithubProvider = ({ children }) => {
   const initialState = {
     users: [],
+    user: {},
     loading: false,
   };
   const [state, dispatch] = useReducer(githubReducer, initialState);
@@ -57,6 +58,25 @@ const GithubProvider = ({ children }) => {
     });
   };
 
+  const getUserDetail = async (login) => {
+    setLoading();
+
+    const { data } = await octokit.request(`GET ${USERS_PATH}/${login}`, {
+      headers: {
+        'X-GitHub-Api-Version': GITHUB_API_VERSION,
+      },
+    });
+
+    if (!data) {
+      window.location = '/notfound';
+    }
+
+    dispatch({
+      type: 'GET_USER_DETAIL',
+      payload: data,
+    });
+  };
+
   const clearUsers = () => dispatch({ type: 'CLEAR_USERS' });
 
   const setLoading = () => dispatch({ type: 'SET_LOADING' });
@@ -65,10 +85,12 @@ const GithubProvider = ({ children }) => {
     <GithubContext.Provider
       value={{
         users: state.users,
+        user: state.user,
         loading: state.loading,
         fetchUsers,
         searchUsers,
         clearUsers,
+        getUserDetail,
       }}
     >
       {children}

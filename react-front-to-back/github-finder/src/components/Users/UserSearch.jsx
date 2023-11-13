@@ -1,24 +1,35 @@
-import { useContext } from 'react';
-import { useState } from 'react';
-import { GithubContext } from '../../context/GithubContext/GithubContext';
+import { useContext, useState } from 'react';
+
 import { AlertContext } from '../../context/Alert/AlertContext';
+import { searchUsers } from '../../context/GithubContext/GithubAction';
+import { GithubContext } from '../../context/GithubContext/GithubContext';
+import { GITHUB_ACTION_TYPE } from '../../utils/actionTypes';
 
 const UserSearch = () => {
   const [text, setText] = useState('');
-  const { users, searchUsers, clearUsers, loading } = useContext(GithubContext);
+  const { users, loading, dispatch } = useContext(GithubContext);
   const { setAlert } = useContext(AlertContext);
+
+  const { SET_LOADING, SEARCH_USERS, CLEAR_USERS } = GITHUB_ACTION_TYPE;
 
   const handleChange = (e) => {
     setText(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const clearUsers = () => {
+    dispatch({ type: CLEAR_USERS });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!text.length) {
       setAlert('Please enter something...', 'error');
     } else {
-      searchUsers(text);
+      dispatch({ type: SET_LOADING });
+      const users = await searchUsers(text);
+      dispatch({ type: SEARCH_USERS, payload: users });
+
       setText('');
     }
   };

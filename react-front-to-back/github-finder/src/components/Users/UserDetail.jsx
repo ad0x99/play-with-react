@@ -4,10 +4,12 @@ import { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import Spinner from '../Layout/Spinner';
 import { FaCode, FaStore, FaUser, FaUserFriends } from 'react-icons/fa';
+import RepoList from '../Repos/RepoList';
 
 const UserDetail = () => {
   const params = useParams();
-  const { getUserDetail, user, loading } = useContext(GithubContext);
+  const { getUserDetail, user, loading, getUserRepos, repos } =
+    useContext(GithubContext);
   const {
     avatar_url,
     name,
@@ -27,6 +29,7 @@ const UserDetail = () => {
 
   useEffect(() => {
     getUserDetail(params.login);
+    getUserRepos(params.login);
   }, [params.login]);
 
   if (loading) {
@@ -167,6 +170,8 @@ const UserDetail = () => {
             </div>
           </div>
         </div>
+
+        <RepoList repos={repos} />
       </div>
     </>
   );

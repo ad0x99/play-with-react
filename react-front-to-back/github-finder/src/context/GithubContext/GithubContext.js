@@ -1,11 +1,11 @@
-import { createContext } from 'react';
 import { Octokit } from 'octokit';
-import { useState } from 'react';
+import { createContext, useReducer } from 'react';
 import {
   GITHUB_API_VERSION,
   GITHUB_TOKEN,
   USERS_PATH,
 } from '../../utils/config';
+import githubReducer from './GithubReducer';
 
 const octokit = new Octokit({
   auth: GITHUB_TOKEN,
@@ -14,22 +14,33 @@ const octokit = new Octokit({
 const GithubContext = createContext();
 
 const GithubProvider = ({ children }) => {
-  const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const initialState = {
+    users: [],
+    loading: false,
+  };
+  const [state, dispatch] = useReducer(githubReducer, initialState);
 
   const fetchUsers = async () => {
+    setLoading();
+
     const { data } = await octokit.request(`GET ${USERS_PATH}`, {
       headers: {
         'X-GitHub-Api-Version': GITHUB_API_VERSION,
       },
     });
 
-    setUsers(data);
-    setLoading(false);
+    dispatch({
+      type: 'GET_USERS',
+      payload: data,
+    });
   };
 
+  const setLoading = () => dispatch({ type: 'SET_LOADING' });
+
   return (
-    <GithubContext.Provider value={{ users, loading, fetchUsers }}>
+    <GithubContext.Provider
+      value={{ users: state.users, loading: state.loading, fetchUsers }}
+    >
       {children}
     </GithubContext.Provider>
   );

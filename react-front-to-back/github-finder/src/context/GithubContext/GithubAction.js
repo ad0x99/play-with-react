@@ -36,36 +36,26 @@ const fetchUsers = async () => {
   return data;
 };
 
-const getUserDetail = async (login) => {
-  const { data } = await octokit.request(`GET ${USERS_PATH}/${login}`, {
-    headers: {
-      'X-GitHub-Api-Version': GITHUB_API_VERSION,
-    },
-  });
-
-  if (!data) {
-    window.location = '/notfound';
-  }
-
-  return data;
-};
-
-const getUserRepos = async (login) => {
+const getUserAndRepos = async (login) => {
+  const url = `GET ${USERS_PATH}/${login}`;
   const params = new URLSearchParams({
     sort: 'created',
     per_page: 10,
   });
+  const headers = {
+    'X-GitHub-Api-Version': GITHUB_API_VERSION,
+  };
 
-  const { data } = await octokit.request(
-    `GET ${USERS_PATH}/${login}/repos?${params}`,
-    {
-      headers: {
-        'X-GitHub-Api-Version': GITHUB_API_VERSION,
-      },
-    }
-  );
+  const [user, repos] = await Promise.all([
+    octokit.request(url, {
+      headers,
+    }),
+    octokit.request(`${url}/repos?${params}`, {
+      headers,
+    }),
+  ]);
 
-  return data;
+  return { user: user.data, repos: repos.data };
 };
 
-export { searchUsers, fetchUsers, getUserDetail, getUserRepos };
+export { searchUsers, fetchUsers, getUserAndRepos };

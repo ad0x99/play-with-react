@@ -2,10 +2,7 @@ import { useContext, useEffect } from 'react';
 import { FaCode, FaStore, FaUser, FaUserFriends } from 'react-icons/fa';
 import { Link, useParams } from 'react-router-dom';
 
-import {
-  getUserDetail,
-  getUserRepos,
-} from '../../context/GithubContext/GithubAction';
+import { getUserAndRepos } from '../../context/GithubContext/GithubAction';
 import { GithubContext } from '../../context/GithubContext/GithubContext';
 import { GITHUB_ACTION_TYPE } from '../../utils/actionTypes';
 import Spinner from '../Layout/Spinner';
@@ -15,7 +12,7 @@ const UserDetail = () => {
   const params = useParams();
   const { user, loading, repos, dispatch } = useContext(GithubContext);
 
-  const { SET_LOADING, GET_USER_DETAIL, GET_USER_REPOS } = GITHUB_ACTION_TYPE;
+  const { SET_LOADING, GET_USER_AND_REPOS } = GITHUB_ACTION_TYPE;
   const {
     avatar_url,
     name,
@@ -35,14 +32,11 @@ const UserDetail = () => {
 
   useEffect(() => {
     dispatch({ type: SET_LOADING });
-    const getUserData = async (user) => {
-      const [userData, userRepos] = await Promise.all([
-        getUserDetail(params.login),
-        getUserRepos(params.login),
-      ]);
 
-      dispatch({ type: GET_USER_DETAIL, payload: userData });
-      dispatch({ type: GET_USER_REPOS, payload: userRepos });
+    const getUserData = async () => {
+      const data = await getUserAndRepos(params.login);
+
+      dispatch({ type: GET_USER_AND_REPOS, payload: data });
     };
 
     getUserData();

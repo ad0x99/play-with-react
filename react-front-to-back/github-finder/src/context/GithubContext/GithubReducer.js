@@ -4,10 +4,9 @@ const githubReducer = (state, action) => {
   const {
     SET_LOADING,
     CLEAR_USERS,
-    GET_USER_DETAIL,
     SEARCH_USERS,
     GET_USERS,
-    GET_USER_REPOS,
+    GET_USER_AND_REPOS,
   } = GITHUB_ACTION_TYPE;
 
   switch (action.type) {
@@ -22,12 +21,6 @@ const githubReducer = (state, action) => {
         users: [],
       };
 
-    case GET_USER_DETAIL:
-      return {
-        ...state,
-        user: action.payload,
-        loading: false,
-      };
     case SEARCH_USERS:
     case GET_USERS:
       return {
@@ -36,10 +29,11 @@ const githubReducer = (state, action) => {
         loading: false,
       };
 
-    case GET_USER_REPOS:
+    case GET_USER_AND_REPOS:
       return {
         ...state,
-        repos: action.payload,
+        user: action.payload.user,
+        repos: action.payload.repos,
         loading: false,
       };
 

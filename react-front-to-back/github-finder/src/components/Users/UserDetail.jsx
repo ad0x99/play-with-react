@@ -40,7 +40,7 @@ const UserDetail = () => {
     };
 
     getUserData();
-  }, [dispatch, params.login]);
+  }, [dispatch, params.login, GET_USER_AND_REPOS, SET_LOADING]);
 
   if (loading) {
     return <Spinner />;

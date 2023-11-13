@@ -1,15 +1,21 @@
-import { useContext } from 'react';
-import { GithubContext } from '../../context/GithubContext/GithubContext';
-import { useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import Spinner from '../Layout/Spinner';
+import { useContext, useEffect } from 'react';
 import { FaCode, FaStore, FaUser, FaUserFriends } from 'react-icons/fa';
+import { Link, useParams } from 'react-router-dom';
+
+import {
+  getUserDetail,
+  getUserRepos,
+} from '../../context/GithubContext/GithubAction';
+import { GithubContext } from '../../context/GithubContext/GithubContext';
+import { GITHUB_ACTION_TYPE } from '../../utils/actionTypes';
+import Spinner from '../Layout/Spinner';
 import RepoList from '../Repos/RepoList';
 
 const UserDetail = () => {
   const params = useParams();
-  const { getUserDetail, user, loading, getUserRepos, repos } =
-    useContext(GithubContext);
+  const { user, loading, repos, dispatch } = useContext(GithubContext);
+
+  const { SET_LOADING, GET_USER_DETAIL, GET_USER_REPOS } = GITHUB_ACTION_TYPE;
   const {
     avatar_url,
     name,
@@ -28,9 +34,19 @@ const UserDetail = () => {
   } = user;
 
   useEffect(() => {
-    getUserDetail(params.login);
-    getUserRepos(params.login);
-  }, [params.login]);
+    dispatch({ type: SET_LOADING });
+    const getUserData = async (user) => {
+      const [userData, userRepos] = await Promise.all([
+        getUserDetail(params.login),
+        getUserRepos(params.login),
+      ]);
+
+      dispatch({ type: GET_USER_DETAIL, payload: userData });
+      dispatch({ type: GET_USER_REPOS, payload: userRepos });
+    };
+
+    getUserData();
+  }, [dispatch, params.login]);
 
   if (loading) {
     return <Spinner />;

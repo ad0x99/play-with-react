@@ -5,7 +5,7 @@ import { AlertContext } from '../../context/Alert/AlertContext';
 
 const UserSearch = () => {
   const [text, setText] = useState('');
-  const { users, searchUsers, clearUsers } = useContext(GithubContext);
+  const { users, searchUsers, clearUsers, loading } = useContext(GithubContext);
   const { setAlert } = useContext(AlertContext);
 
   const handleChange = (e) => {
@@ -39,6 +39,9 @@ const UserSearch = () => {
                 type="submit"
                 className="absolute top-0 right-0 rounded-l-none w-36 btn btn-lg"
               >
+                {loading && (
+                  <span class="loading loading-spinner text-error"></span>
+                )}
                 Go
               </button>
             </div>
@@ -48,7 +51,7 @@ const UserSearch = () => {
 
       {!!users.length && (
         <div>
-          <button onClick={clearUsers} className="btn btn-ghost btn-lg">
+          <button onClick={clearUsers} className="btn btn-error btn-lg">
             Clear
           </button>
         </div>

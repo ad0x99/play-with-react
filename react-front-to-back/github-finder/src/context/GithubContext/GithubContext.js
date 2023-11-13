@@ -3,6 +3,7 @@ import { createContext, useReducer } from 'react';
 import {
   GITHUB_API_VERSION,
   GITHUB_TOKEN,
+  SEARCH_USERS_PATH,
   USERS_PATH,
 } from '../../utils/config';
 import githubReducer from './GithubReducer';
@@ -35,11 +36,40 @@ const GithubProvider = ({ children }) => {
     });
   };
 
+  const searchUsers = async (text) => {
+    setLoading();
+
+    const params = new URLSearchParams({
+      q: text,
+    });
+
+    const {
+      data: { items },
+    } = await octokit.request(`GET ${SEARCH_USERS_PATH}?${params}`, {
+      headers: {
+        'X-GitHub-Api-Version': GITHUB_API_VERSION,
+      },
+    });
+
+    dispatch({
+      type: 'SEARCH_USERS',
+      payload: items,
+    });
+  };
+
+  const clearUsers = () => dispatch({ type: 'CLEAR_USERS' });
+
   const setLoading = () => dispatch({ type: 'SET_LOADING' });
 
   return (
     <GithubContext.Provider
-      value={{ users: state.users, loading: state.loading, fetchUsers }}
+      value={{
+        users: state.users,
+        loading: state.loading,
+        fetchUsers,
+        searchUsers,
+        clearUsers,
+      }}
     >
       {children}
     </GithubContext.Provider>

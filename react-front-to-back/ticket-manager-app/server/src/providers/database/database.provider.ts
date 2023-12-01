@@ -12,10 +12,12 @@ class MongoDB {
      */
     public async connectMongoDB() {
         const connection = `${process.env.DB_PROTOCOL}://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}/?retryWrites=true&w=majority`;
+        const dbName = process.env.DB_NAME;
 
         try {
             const conn = await mongoose.connect(connection, {
                 maxPoolSize: 10, // set maximum pool size is 10
+                dbName,
             } as ConnectOptions);
 
             console.group([

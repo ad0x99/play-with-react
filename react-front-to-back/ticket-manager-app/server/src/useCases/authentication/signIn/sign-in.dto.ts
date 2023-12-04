@@ -12,6 +12,7 @@ class SignInDTO {
 interface ISignInUserResponseDTO {
     email: string;
     name: string;
+    accessToken: string;
 }
 
 export { ISignInUserResponseDTO, SignInDTO };

@@ -1,7 +1,6 @@
-import { Report, provideSingleton } from "@expressots/core";
+import { provideSingleton } from "@expressots/core";
 import { ModelType } from "@typegoose/typegoose/lib/types";
 import {
-    FilterQuery,
     ObjectId,
     ProjectionFields,
     QueryOptions,
@@ -11,7 +10,6 @@ import {
 @provideSingleton(BaseRepository)
 export class BaseRepository<T> {
     protected resources!: ModelType<T>;
-    private report!: Report;
 
     getResource() {
         return this.resources;
@@ -21,31 +19,21 @@ export class BaseRepository<T> {
         return this.resources.findById(_id).select(project);
     }
 
-    async findOne(filter: FilterQuery<T>, project: string[] = []) {
-        const resource = await this.resources.findOne(filter).select(project);
-
-        if (!resource) {
-            this.report.error(
-                "Resource not found",
-                404,
-                this.getResource().toString(),
-            );
-        }
-
-        return resource;
+    async findOne(conditions: any = {}, project: string[] = []) {
+        return await this.resources.findOne(conditions).select(project);
     }
 
-    async getOne(filter: FilterQuery<T> = {}, project: string[] = []) {
-        return this.resources.findOne(filter).select(project);
+    async getOne(conditions: any = {}, project: string[] = []) {
+        return this.resources.findOne(conditions).select(project);
     }
 
     async getList(
-        filter: FilterQuery<T> = {},
+        conditions: any = {},
         options: QueryOptions<T> = {},
         projections: ProjectionFields<T> = {},
     ) {
         const { sort, skip, limit } = options;
-        const result = this.resources.find(filter);
+        const result = this.resources.find(conditions);
 
         if (sort) {
             result.sort(sort);
@@ -67,19 +55,19 @@ export class BaseRepository<T> {
     }
 
     async updateOne(
-        filter: FilterQuery<T> = {},
+        conditions: any = {},
         update: UpdateQuery<T> = {},
         options: QueryOptions = {},
     ) {
-        return this.resources.updateOne(filter, update, options);
+        return this.resources.updateOne(conditions, update, options);
     }
 
     async updateMany(
-        filter: FilterQuery<T> = {},
+        conditions: any = {},
         update: UpdateQuery<T> = {},
         options: QueryOptions = {},
     ) {
-        return this.resources.updateMany(filter, update, options);
+        return this.resources.updateMany(conditions, update, options);
     }
 
     async deleteById(_id: ObjectId): Promise<boolean> {
@@ -87,13 +75,13 @@ export class BaseRepository<T> {
         return result.acknowledged;
     }
 
-    async deleteOne(filter: any): Promise<boolean> {
-        const result = await this.resources.deleteOne(filter);
+    async deleteOne(conditions: any = {}): Promise<boolean> {
+        const result = await this.resources.deleteOne(conditions);
         return result.acknowledged;
     }
 
-    async deleteMany(filter: any) {
-        const result = await this.resources.deleteMany(filter);
+    async deleteMany(conditions: any = {}) {
+        const result = await this.resources.deleteMany(conditions);
         return result.acknowledged;
     }
 }

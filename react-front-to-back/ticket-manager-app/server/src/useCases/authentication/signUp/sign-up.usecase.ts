@@ -12,12 +12,12 @@ class SignUpUserCase {
         private authUtils: AuthUtils,
     ) {}
 
-    async signUp(payload: SignUpDTO): Promise<ISignUpUserResponseDTO | void> {
+    async signUp(payload: SignUpDTO): Promise<ISignUpUserResponseDTO | null> {
         try {
             const { email, password, name } = payload;
-            const userExists = await this.authRepository.getOne({ email });
 
-            if (userExists) {
+            const user = await this.authRepository.getOne({ email });
+            if (user) {
                 throw this.report.error(
                     `User with email ${email} already exists`,
                 );
@@ -28,7 +28,7 @@ class SignUpUserCase {
                 name,
                 password: await this.authUtils.hashPassword(password),
             });
-            return newUser;
+            return { email: newUser!.email, name: newUser!.name };
         } catch (error) {
             throw error;
         }

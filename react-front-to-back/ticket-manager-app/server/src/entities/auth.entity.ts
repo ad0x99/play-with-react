@@ -1,8 +1,11 @@
 import { provide } from "inversify-binding-decorators";
 import { getModelForClass, prop } from "@typegoose/typegoose";
+import { ObjectId } from "mongoose";
 
 @provide(Auth)
 export class Auth {
+    readonly _id: ObjectId;
+
     @prop({ required: true })
     public name!: string;
 
@@ -13,4 +16,6 @@ export class Auth {
     public password!: string;
 }
 
-export const AuthModel = getModelForClass(Auth);
+export const AuthModel = getModelForClass(Auth, {
+    schemaOptions: { versionKey: false },
+});

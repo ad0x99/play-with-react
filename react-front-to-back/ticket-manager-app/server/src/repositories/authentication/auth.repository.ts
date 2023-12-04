@@ -9,7 +9,7 @@ class AuthRepository extends BaseRepository<Auth> {
         this.resources = AuthModel;
     }
 
-    async signUp(auth: Auth): Promise<Auth | void> {
+    async signUp(auth: Partial<Auth>): Promise<Auth | null> {
         return this.create(auth);
     }
 }

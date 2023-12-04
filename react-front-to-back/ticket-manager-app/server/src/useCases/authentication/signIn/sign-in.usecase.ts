@@ -16,22 +16,26 @@ class SignInUserCase {
         try {
             const { email, password } = payload;
 
-            const userExists = await this.authRepository.findOne({ email });
+            const user = await this.authRepository.findOne({
+                email,
+            });
 
             if (
-                !userExists ||
-                !(await this.authUtils.isValidPassword(password, userExists))
+                !user ||
+                !(await this.authUtils.isValidPassword(password, user))
             ) {
                 throw this.report.error(
                     `Email or password are incorrect, please try again`,
                 );
             }
 
+            const token = await this.authUtils.tokenGenerator(user);
             return {
-                name: userExists.name,
-                email: userExists.email,
+                name: user.name,
+                email: user.email,
+                accessToken: token,
             };
-        } catch (error) {
+        } catch (error: any) {
             throw error;
         }
     }

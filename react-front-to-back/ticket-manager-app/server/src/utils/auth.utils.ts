@@ -1,12 +1,18 @@
+import { NextFunction, Request, Response } from "express";
 import { provide } from "inversify-binding-decorators";
 import { Report } from "@expressots/core";
 import bcrypt from "bcryptjs";
-import { SignOptions, sign, verify } from "jsonwebtoken";
-import { Auth } from "@entities/auth.entity";
+import { sign, verify } from "jsonwebtoken";
+import { Auth, AuthModel } from "@entities/auth.entity";
+import { ModelType } from "@typegoose/typegoose/lib/types";
 
 @provide(AuthUtils)
 class AuthUtils {
-    constructor(private report: Report) {}
+    protected auth: ModelType<Auth>;
+
+    constructor(private report: Report) {
+        this.auth = AuthModel;
+    }
 
     async hashPassword(password: string) {
         const salt = await bcrypt.genSalt(+process.env.SALT_NUMBER!);
@@ -29,22 +35,19 @@ class AuthUtils {
         return isValidPassword;
     }
 
-    tokenGenerator(args, options?: SignOptions): string {
+    tokenGenerator(auth: Auth): string {
         const token: string = sign(
-            args,
+            { _id: auth._id, email: auth.email },
             process.env.SECRET_TOKEN as string,
-            options,
+            {
+                expiresIn: +process.env.ACCESS_TOKEN_EXP!,
+            },
         );
         return token;
     }
 
     verifyToken(token: string) {
-        if (!token) {
-            throw this.report.error("Invalid Token");
-        }
-
-        const verifiedToken = verify(token, process.env.SECRET_TOKEN as string);
-        return verifiedToken;
+        return verify(token, process.env.SECRET_TOKEN as string);
     }
 }
 

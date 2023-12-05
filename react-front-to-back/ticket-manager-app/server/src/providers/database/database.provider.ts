@@ -36,7 +36,7 @@ class MongoDB {
                         : "null"
                 }`,
             ]);
-            this.report.error(error.message, undefined, "MongoDB");
+            throw this.report.error(error);
         }
     }
 }

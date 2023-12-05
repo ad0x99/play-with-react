@@ -1,13 +1,36 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaSignInAlt } from 'react-icons/fa';
+import { useDispatch, useSelector } from 'react-redux';
+import { login, reset } from '../features/auth/authSlice';
+import Spinner from '../components/Spinner';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router';
 
 const Login = (props) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { user, isLoading, isSuccess, isError, message } = useSelector(
+    (state) => state.auth
+  );
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
 
   const { email, password } = formData;
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(message);
+    }
+
+    // Redirect when logged in
+    if (isSuccess || user) {
+      navigate('/');
+    }
+
+    dispatch(reset());
+  }, [isError, isSuccess, user, message, navigate, dispatch]);
 
   const onChange = (e) => {
     setFormData((prevState) => ({
@@ -18,7 +41,18 @@ const Login = (props) => {
 
   const onSubmit = (e) => {
     e.preventDefault();
+
+    const userData = {
+      email,
+      password,
+    };
+
+    dispatch(login(userData));
   };
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <>
@@ -53,6 +87,7 @@ const Login = (props) => {
               placeholder="Enter your password"
               value={password}
               onChange={onChange}
+              autoComplete="on"
               required
             />
           </div>

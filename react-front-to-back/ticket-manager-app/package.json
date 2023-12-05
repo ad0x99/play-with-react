@@ -2,7 +2,7 @@
   "name": "ticket-manager-app",
   "version": "1.0.0",
   "description": "- Ticket Manager App was built with [React](https://react.dev/) (Frontend), [ExpressTS](https://expresso-ts.com/) (Backend) and [MongoDB](https://www.mongodb.com/) (Database)",
-  "main": "main.ts",
+  "main": "index.js",
   "scripts": {
     "start": "concurrently \"yarn run server\" \"yarn run client\"",
     "client": "cd client && yarn start",

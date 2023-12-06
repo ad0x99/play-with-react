@@ -7,15 +7,15 @@ export class Auth {
     readonly _id: ObjectId;
 
     @prop({ required: true })
-    public name!: string;
+    public name: string;
 
     @prop({ required: true })
-    public email!: string;
+    public email: string;
 
     @prop({ required: true })
-    public password!: string;
+    public password: string;
 }
 
 export const AuthModel = getModelForClass(Auth, {
-    schemaOptions: { versionKey: false },
+    schemaOptions: { timestamps: true, versionKey: false },
 });

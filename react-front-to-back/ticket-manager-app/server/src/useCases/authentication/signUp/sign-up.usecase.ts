@@ -4,8 +4,8 @@ import { ISignUpUserResponseDTO, SignUpDTO } from "./sign-up.dto";
 import { Report } from "@expressots/core";
 import { AuthUtils } from "utils/auth.utils";
 
-@provide(SignUpUserCase)
-class SignUpUserCase {
+@provide(SignUpUseCase)
+class SignUpUseCase {
     constructor(
         private authRepository: AuthRepository,
         private report: Report,
@@ -35,4 +35,4 @@ class SignUpUserCase {
     }
 }
 
-export { SignUpUserCase };
+export { SignUpUseCase };

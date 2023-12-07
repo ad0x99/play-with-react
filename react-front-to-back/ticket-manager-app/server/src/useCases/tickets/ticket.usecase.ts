@@ -4,9 +4,10 @@ import {
     DeleteTicketDTO,
     UpdateTicketDTO,
 } from "./ticket.dto";
-import { Report } from "@expressots/core";
+import { Report, StatusCode } from "@expressots/core";
 import { provide } from "inversify-binding-decorators";
 import { AuthRepository } from "@repositories/authentication/auth.repository";
+import { ERROR_MESSAGE } from "utils/constant";
 
 @provide(TicketUseCase)
 class TicketUseCase {
@@ -32,7 +33,10 @@ class TicketUseCase {
             const isUserExist = await this.authRepository.getById(user);
 
             if (!isUserExist) {
-                throw this.report.error("User does not exist", 404);
+                throw this.report.error(
+                    ERROR_MESSAGE.USER_NOT_EXIST,
+                    StatusCode.NotFound,
+                );
             }
 
             const newTicket = await this.ticketRepository.createTicket(
@@ -53,13 +57,16 @@ class TicketUseCase {
             );
 
             if (!isTicketExist) {
-                throw this.report.error("Ticket does not exist", 404);
+                throw this.report.error(
+                    ERROR_MESSAGE.TICKET_NOT_EXIST,
+                    StatusCode.NotFound,
+                );
             }
 
             if (isTicketExist.user !== user) {
                 throw this.report.error(
-                    "You don't have permission to update this ticket",
-                    403,
+                    ERROR_MESSAGE.TICKET_PERMISSION_ERROR,
+                    StatusCode.Forbidden,
                 );
             }
 
@@ -76,7 +83,10 @@ class TicketUseCase {
             const isTicketExist = await this.ticketRepository.getById(ticketId);
 
             if (!isTicketExist) {
-                throw this.report.error("Ticket does not exist", 404);
+                throw this.report.error(
+                    ERROR_MESSAGE.TICKET_NOT_EXIST,
+                    StatusCode.NotFound,
+                );
             }
 
             return await this.ticketRepository.deleteTicket(ticketId);

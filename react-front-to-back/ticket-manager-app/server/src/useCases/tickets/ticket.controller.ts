@@ -9,6 +9,7 @@ import { BaseController, StatusCode, ValidateDTO } from "@expressots/core";
 import { Response } from "express";
 import { CreateTicketDTO, ICreateTicketDTO } from "./ticket.dto";
 import { TicketUseCase } from "./ticket.usecase";
+import { isAuthenticate } from "middlewares/auth.middlewares";
 
 @controller("/tickets")
 class TicketController extends BaseController {
@@ -16,7 +17,7 @@ class TicketController extends BaseController {
         super();
     }
 
-    @Get("/")
+    @Get("/", isAuthenticate)
     async getTickets(
         @body()
         payload: null,
@@ -29,7 +30,7 @@ class TicketController extends BaseController {
         );
     }
 
-    @Post("/", ValidateDTO(CreateTicketDTO))
+    @Post("/", ValidateDTO(CreateTicketDTO), isAuthenticate)
     async createTicket(
         @body()
         payload: CreateTicketDTO,

@@ -1,4 +1,3 @@
-import { NextFunction, Request, Response } from "express";
 import { provide } from "inversify-binding-decorators";
 import { Report } from "@expressots/core";
 import bcrypt from "bcryptjs";

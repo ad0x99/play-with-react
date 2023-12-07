@@ -16,7 +16,7 @@ class SignUpUseCase {
         try {
             const { email, password, name } = payload;
 
-            const user = await this.authRepository.getOne({ email });
+            const user = await this.authRepository.findOne({ email });
             if (user) {
                 throw this.report.error(
                     `User with email ${email} already exists`,

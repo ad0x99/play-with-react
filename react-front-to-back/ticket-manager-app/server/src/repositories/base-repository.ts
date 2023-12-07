@@ -20,10 +20,6 @@ export class BaseRepository<T> {
     }
 
     async findOne(conditions: any = {}, project: string[] = []) {
-        return await this.resources.findOne(conditions).select(project);
-    }
-
-    async getOne(conditions: any = {}, project: string[] = []) {
         return this.resources.findOne(conditions).select(project);
     }
 

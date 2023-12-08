@@ -4,7 +4,6 @@ import {
     IsMongoId,
     IsNotEmpty,
     IsOptional,
-    Length,
     MaxLength,
     MinLength,
 } from "class-validator";
@@ -31,7 +30,8 @@ class CreateTicketDTO {
 
 class UpdateTicketDTO {
     @IsNotEmpty()
-    ticket: Ticket;
+    @IsMongoId()
+    ticket: ObjectId;
 
     @IsNotEmpty()
     @IsMongoId()
@@ -57,6 +57,33 @@ class DeleteTicketDTO {
     ticketId: ObjectId;
 }
 
-interface ICreateTicketDTO {}
+interface IGetTicketsDTO {
+    user: ObjectId;
+    product: ProductType;
+    description: string;
+    status: Status;
+}
 
-export { CreateTicketDTO, UpdateTicketDTO, DeleteTicketDTO, ICreateTicketDTO };
+interface ICreateTicketDTO {
+    user: ObjectId;
+    product: ProductType;
+    description: string;
+    status: Status;
+}
+
+interface IUpdateTicketDTO {
+    ticket: Ticket;
+    user: ObjectId;
+    product: ProductType;
+    description: string;
+    status: Status;
+}
+
+export {
+    IGetTicketsDTO,
+    CreateTicketDTO,
+    UpdateTicketDTO,
+    DeleteTicketDTO,
+    ICreateTicketDTO,
+    IUpdateTicketDTO,
+};

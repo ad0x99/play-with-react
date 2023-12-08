@@ -36,6 +36,7 @@ export const isAuthenticate = async (
                 throw report.error(new Error());
             }
 
+            req.userId = userData._id;
             next();
         } else {
             report.error(ERROR_MESSAGE.MISSING_AUTHORIZATION);

@@ -2,12 +2,15 @@ import { TicketRepository } from "@repositories/tickets/ticket.repository";
 import {
     CreateTicketDTO,
     DeleteTicketDTO,
+    ICreateTicketDTO,
+    IGetTicketsDTO,
     UpdateTicketDTO,
 } from "./ticket.dto";
 import { Report, StatusCode } from "@expressots/core";
 import { provide } from "inversify-binding-decorators";
 import { AuthRepository } from "@repositories/authentication/auth.repository";
 import { ERROR_MESSAGE } from "utils/constant";
+import { Request } from "express";
 
 @provide(TicketUseCase)
 class TicketUseCase {
@@ -17,16 +20,18 @@ class TicketUseCase {
         private report: Report,
     ) {}
 
-    async getTickets() {
+    async getTickets(): Promise<IGetTicketsDTO[] | null> {
         try {
-            const ticket = await this.ticketRepository.getTickets();
+            const ticket = await this.ticketRepository.getList();
             return ticket;
         } catch (error) {
             throw error;
         }
     }
 
-    async createTicket(createTicketInput: CreateTicketDTO) {
+    async createTicket(
+        createTicketInput: CreateTicketDTO,
+    ): Promise<ICreateTicketDTO | null> {
         try {
             const { user } = createTicketInput;
 
@@ -39,7 +44,7 @@ class TicketUseCase {
                 );
             }
 
-            const newTicket = await this.ticketRepository.createTicket(
+            const newTicket = await this.ticketRepository.create(
                 createTicketInput,
             );
             return newTicket;
@@ -48,14 +53,12 @@ class TicketUseCase {
         }
     }
 
-    async updateTicket(updateTicketDTO: UpdateTicketDTO) {
+    async updateTicket(updateTicketDTO: UpdateTicketDTO, req: Request) {
         try {
-            const { ticket, user } = updateTicketDTO;
+            const { ticket, user, product, description, status } =
+                updateTicketDTO;
 
-            const isTicketExist = await this.ticketRepository.getById(
-                ticket._id,
-            );
-
+            const isTicketExist = await this.ticketRepository.getById(ticket);
             if (!isTicketExist) {
                 throw this.report.error(
                     ERROR_MESSAGE.TICKET_NOT_EXIST,
@@ -63,20 +66,32 @@ class TicketUseCase {
                 );
             }
 
-            if (isTicketExist.user !== user) {
+            if (isTicketExist.user !== req.userId) {
                 throw this.report.error(
                     ERROR_MESSAGE.TICKET_PERMISSION_ERROR,
                     StatusCode.Forbidden,
                 );
             }
 
-            return await this.ticketRepository.updateTicket(updateTicketDTO);
+            return await this.ticketRepository.updateOne(
+                { _id: ticket },
+                {
+                    user,
+                    product,
+                    description,
+                    status,
+                },
+                { new: true },
+            );
         } catch (error) {
             throw error;
         }
     }
 
-    async deleteTicket(deleteTicketDTO: DeleteTicketDTO) {
+    async deleteTicket(
+        deleteTicketDTO: DeleteTicketDTO,
+        req: Request,
+    ): Promise<boolean | null> {
         try {
             const { ticketId } = deleteTicketDTO;
 
@@ -89,7 +104,14 @@ class TicketUseCase {
                 );
             }
 
-            return await this.ticketRepository.deleteTicket(ticketId);
+            if (isTicketExist.user !== req.userId) {
+                throw this.report.error(
+                    ERROR_MESSAGE.TICKET_PERMISSION_ERROR,
+                    StatusCode.Forbidden,
+                );
+            }
+
+            return await this.ticketRepository.deleteOne({ _id: ticketId });
         } catch (error) {
             throw error;
         }

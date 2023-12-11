@@ -12,4 +12,5 @@ export const API_URL = {
   REGISTER: '/sign-up',
   LOGIN: '/sign-in',
   TICKETS: '/tickets',
+  NOTES: '/notes',
 };

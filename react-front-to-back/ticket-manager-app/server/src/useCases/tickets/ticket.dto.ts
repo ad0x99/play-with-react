@@ -30,23 +30,21 @@ class CreateTicketDTO {
     status?: Status;
 }
 
+class UpdateTicketParam {
+    @IsNotEmpty()
+    @IsMongoId()
+    ticketId: ObjectId;
+}
+
 class UpdateTicketDTO {
-    @IsNotEmpty()
-    @IsMongoId()
-    ticket: ObjectId;
-
-    @IsNotEmpty()
-    @IsMongoId()
-    user: ObjectId;
-
-    @IsNotEmpty()
+    @IsOptional()
     @IsEnum(ProductType)
-    product: ProductType;
+    product?: ProductType;
 
-    @IsNotEmpty()
+    @IsOptional()
     @MinLength(5)
     @MaxLength(200)
-    description: string;
+    description?: string;
 
     @IsOptional()
     @IsEnum(Status)
@@ -85,6 +83,7 @@ export {
     IGetTicketsResponse,
     GetTicketDTO,
     CreateTicketDTO,
+    UpdateTicketParam,
     UpdateTicketDTO,
     DeleteTicketDTO,
     ICreateTicketResponse,

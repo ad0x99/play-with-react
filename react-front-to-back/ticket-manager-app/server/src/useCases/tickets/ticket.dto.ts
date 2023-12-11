@@ -9,11 +9,13 @@ import {
 } from "class-validator";
 import { ObjectId } from "mongoose";
 
-class CreateTicketDTO {
+class GetTicketDTO {
     @IsNotEmpty()
     @IsMongoId()
-    user: ObjectId;
+    ticketId: ObjectId;
+}
 
+class CreateTicketDTO {
     @IsNotEmpty()
     @IsEnum(ProductType)
     product: ProductType;
@@ -57,21 +59,21 @@ class DeleteTicketDTO {
     ticketId: ObjectId;
 }
 
-interface IGetTicketsDTO {
+interface IGetTicketsResponse {
     user: ObjectId;
     product: ProductType;
     description: string;
     status: Status;
 }
 
-interface ICreateTicketDTO {
+interface ICreateTicketResponse {
     user: ObjectId;
     product: ProductType;
     description: string;
     status: Status;
 }
 
-interface IUpdateTicketDTO {
+interface IUpdateTicketResponse {
     ticket: Ticket;
     user: ObjectId;
     product: ProductType;
@@ -80,10 +82,11 @@ interface IUpdateTicketDTO {
 }
 
 export {
-    IGetTicketsDTO,
+    IGetTicketsResponse,
+    GetTicketDTO,
     CreateTicketDTO,
     UpdateTicketDTO,
     DeleteTicketDTO,
-    ICreateTicketDTO,
-    IUpdateTicketDTO,
+    ICreateTicketResponse,
+    IUpdateTicketResponse,
 };

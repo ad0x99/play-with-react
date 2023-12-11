@@ -1,16 +1,18 @@
+import { mongoose } from "@typegoose/typegoose";
+import { Report, StatusCode } from "@expressots/core";
+import { AuthRepository } from "@repositories/authentication/auth.repository";
 import { TicketRepository } from "@repositories/tickets/ticket.repository";
+import { Request } from "express";
+import { provide } from "inversify-binding-decorators";
+import { ERROR_MESSAGE } from "utils/constant";
 import {
     CreateTicketDTO,
     DeleteTicketDTO,
-    ICreateTicketDTO,
-    IGetTicketsDTO,
+    GetTicketDTO,
+    ICreateTicketResponse,
+    IGetTicketsResponse,
     UpdateTicketDTO,
 } from "./ticket.dto";
-import { Report, StatusCode } from "@expressots/core";
-import { provide } from "inversify-binding-decorators";
-import { AuthRepository } from "@repositories/authentication/auth.repository";
-import { ERROR_MESSAGE } from "utils/constant";
-import { Request } from "express";
 
 @provide(TicketUseCase)
 class TicketUseCase {
@@ -20,21 +22,50 @@ class TicketUseCase {
         private report: Report,
     ) {}
 
-    async getTickets(): Promise<IGetTicketsDTO[] | null> {
+    async getTickets(req: Request): Promise<IGetTicketsResponse[] | null> {
         try {
-            const ticket = await this.ticketRepository.getList();
+            const tickets = await this.ticketRepository.getList(
+                {
+                    user: req.userId,
+                },
+                { sort: { date: -1 } },
+            );
+
+            return tickets;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async getTicket(
+        payload: GetTicketDTO,
+        req: Request,
+    ): Promise<IGetTicketsResponse | null> {
+        try {
+            const ticket = await this.ticketRepository.getById(
+                payload.ticketId,
+            );
+
+            if (!ticket) {
+                throw this.report.error(
+                    ERROR_MESSAGE.TICKET_NOT_EXIST,
+                    StatusCode.NotFound,
+                );
+            }
+
             return ticket;
         } catch (error) {
+            console.log(error);
             throw error;
         }
     }
 
     async createTicket(
         createTicketInput: CreateTicketDTO,
-    ): Promise<ICreateTicketDTO | null> {
+        req: Request,
+    ): Promise<ICreateTicketResponse | null> {
         try {
-            const { user } = createTicketInput;
-
+            const user = req.userId;
             const isUserExist = await this.authRepository.getById(user);
 
             if (!isUserExist) {
@@ -44,9 +75,10 @@ class TicketUseCase {
                 );
             }
 
-            const newTicket = await this.ticketRepository.create(
-                createTicketInput,
-            );
+            const newTicket = await this.ticketRepository.create({
+                user,
+                ...createTicketInput,
+            });
             return newTicket;
         } catch (error) {
             throw error;

@@ -5,17 +5,20 @@ import {
     Put,
     body,
     controller,
+    param,
     request,
     response,
 } from "@expressots/adapter-express";
 import { BaseController, StatusCode, ValidateDTO } from "@expressots/core";
-import { Response, Request } from "express";
+import { Request, Response } from "express";
 import { isAuthenticate } from "middlewares/auth.middlewares";
 import {
     CreateTicketDTO,
     DeleteTicketDTO,
-    ICreateTicketDTO,
-    IUpdateTicketDTO,
+    GetTicketDTO,
+    ICreateTicketResponse,
+    IGetTicketsResponse,
+    IUpdateTicketResponse,
     UpdateTicketDTO,
 } from "./ticket.dto";
 import { TicketUseCase } from "./ticket.usecase";
@@ -28,12 +31,25 @@ class TicketController extends BaseController {
 
     @Get("/", isAuthenticate)
     async getTickets(
-        @body()
-        payload: null,
         @response() res: Response,
-    ): Promise<ICreateTicketDTO | null> {
+        @request() req: Request,
+    ): Promise<IGetTicketsResponse[] | null> {
         return this.callUseCaseAsync(
-            this.ticketUseCase.getTickets(),
+            this.ticketUseCase.getTickets(req),
+            res,
+            StatusCode.OK,
+        );
+    }
+
+    @Get("/:ticketId", isAuthenticate)
+    async getTicket(
+        @param() payload: GetTicketDTO,
+        @response()
+        res: Response,
+        req: Request,
+    ): Promise<IGetTicketsResponse | null> {
+        return this.callUseCaseAsync(
+            this.ticketUseCase.getTicket(payload, req),
             res,
             StatusCode.OK,
         );
@@ -44,9 +60,10 @@ class TicketController extends BaseController {
         @body()
         payload: CreateTicketDTO,
         @response() res: Response,
-    ): Promise<ICreateTicketDTO | null> {
+        @request() req: Request,
+    ): Promise<ICreateTicketResponse | null> {
         return this.callUseCaseAsync(
-            this.ticketUseCase.createTicket(payload),
+            this.ticketUseCase.createTicket(payload, req),
             res,
             StatusCode.Created,
         );
@@ -58,7 +75,7 @@ class TicketController extends BaseController {
         payload: UpdateTicketDTO,
         @response() res: Response,
         @request() req: Request,
-    ): Promise<IUpdateTicketDTO | null> {
+    ): Promise<IUpdateTicketResponse | null> {
         return this.callUseCaseAsync(
             this.ticketUseCase.updateTicket(payload, req),
             res,

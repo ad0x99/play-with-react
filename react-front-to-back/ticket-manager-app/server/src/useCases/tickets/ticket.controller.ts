@@ -20,6 +20,7 @@ import {
     IGetTicketsResponse,
     IUpdateTicketResponse,
     UpdateTicketDTO,
+    UpdateTicketParam,
 } from "./ticket.dto";
 import { TicketUseCase } from "./ticket.usecase";
 
@@ -69,23 +70,23 @@ class TicketController extends BaseController {
         );
     }
 
-    @Put("/", ValidateDTO(UpdateTicketDTO), isAuthenticate)
+    @Put("/:ticketId", ValidateDTO(UpdateTicketDTO), isAuthenticate)
     async updateTicket(
-        @body()
-        payload: UpdateTicketDTO,
+        @param() param: UpdateTicketParam,
+        @body() payload: UpdateTicketDTO,
         @response() res: Response,
         @request() req: Request,
     ): Promise<IUpdateTicketResponse | null> {
         return this.callUseCaseAsync(
-            this.ticketUseCase.updateTicket(payload, req),
+            this.ticketUseCase.updateTicket(param, payload, req),
             res,
             StatusCode.Created,
         );
     }
 
-    @Delete("/", ValidateDTO(DeleteTicketDTO), isAuthenticate)
+    @Delete("/:ticketId", ValidateDTO(DeleteTicketDTO), isAuthenticate)
     async deleteTicket(
-        @body()
+        @param()
         payload: DeleteTicketDTO,
         @response() res: Response,
         @request() req: Request,

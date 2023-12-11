@@ -12,6 +12,7 @@ import {
     ICreateTicketResponse,
     IGetTicketsResponse,
     UpdateTicketDTO,
+    UpdateTicketParam,
 } from "./ticket.dto";
 
 @provide(TicketUseCase)
@@ -85,12 +86,17 @@ class TicketUseCase {
         }
     }
 
-    async updateTicket(updateTicketDTO: UpdateTicketDTO, req: Request) {
+    async updateTicket(
+        param: UpdateTicketParam,
+        payload: UpdateTicketDTO,
+        req: Request,
+    ) {
         try {
-            const { ticket, user, product, description, status } =
-                updateTicketDTO;
+            const { ticketId } = param;
+            const { product, description, status } = payload;
+            const conditions: any = {};
 
-            const isTicketExist = await this.ticketRepository.getById(ticket);
+            const isTicketExist = await this.ticketRepository.getById(ticketId);
             if (!isTicketExist) {
                 throw this.report.error(
                     ERROR_MESSAGE.TICKET_NOT_EXIST,
@@ -98,21 +104,29 @@ class TicketUseCase {
                 );
             }
 
-            if (isTicketExist.user !== req.userId) {
-                throw this.report.error(
-                    ERROR_MESSAGE.TICKET_PERMISSION_ERROR,
-                    StatusCode.Forbidden,
-                );
+            // TODO: fix permission issue
+            // if (isTicketExist.user !== req.userId) {
+            //     throw this.report.error(
+            //         ERROR_MESSAGE.TICKET_PERMISSION_ERROR,
+            //         StatusCode.Forbidden,
+            //     );
+            // }
+
+            if (product) {
+                conditions.product = product;
+            }
+
+            if (description) {
+                conditions.description = description;
+            }
+
+            if (status) {
+                conditions.status = status;
             }
 
             return await this.ticketRepository.updateOne(
-                { _id: ticket },
-                {
-                    user,
-                    product,
-                    description,
-                    status,
-                },
+                { _id: ticketId },
+                conditions,
                 { new: true },
             );
         } catch (error) {

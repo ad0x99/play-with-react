@@ -110,6 +110,12 @@ export const ticketSlice = createSlice({
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
+      })
+      .addCase(closeTicket.fulfilled, (state, action) => {
+        state.ticket = action.payload;
+        state.tickets = state.tickets.map((ticket) =>
+          ticket._id === action.payload._id ? action.payload : ticket
+        );
       });
   },
 });

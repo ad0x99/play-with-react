@@ -6,7 +6,9 @@
   "scripts": {
     "start": "concurrently \"yarn run server\" \"yarn run client\"",
     "client": "cd client && yarn start",
-    "server": "cd server && yarn dev"
+    "server": "cd server && yarn dev",
+    "client:install": "cd client && yarn install",
+    "server:install": "cd server && yarn install"
   },
   "author": "ad0x99",
   "license": "ISC",

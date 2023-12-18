@@ -6,6 +6,8 @@ export const THUNK_TYPE = {
   GET_TICKETS: 'tickets/getAll',
   GET_TICKET: 'tickets/get',
   CLOSE_TICKET: 'tickets/close',
+  GET_NOTES: 'notes/getAll',
+  CREATE_NOTE: 'notes/create',
 };
 
 export const API_URL = {

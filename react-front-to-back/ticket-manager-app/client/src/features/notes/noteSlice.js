@@ -1,14 +1,19 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import noteService from './noteSlice';
+import noteService from './noteService';
 import { extractErrorMessage } from '../../utils/errorHandler';
+import { THUNK_TYPE } from '../../utils/constant';
 
 const initialState = {
-  notes: null,
+  notes: [],
+  isError: false,
+  isSuccess: false,
+  isLoading: false,
+  message: '',
 };
 
 // Get ticket notes
 export const getNotes = createAsyncThunk(
-  'notes/getAll',
+  THUNK_TYPE.GET_NOTES,
   async (ticketId, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.accessToken;
@@ -21,7 +26,7 @@ export const getNotes = createAsyncThunk(
 
 // Create ticket note
 export const createNote = createAsyncThunk(
-  'notes/create',
+  THUNK_TYPE.CREATE_NOTE,
   async ({ noteText, ticketId }, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.accessToken;
@@ -35,18 +40,39 @@ export const createNote = createAsyncThunk(
 export const noteSlice = createSlice({
   name: 'note',
   initialState,
+  reducers: {
+    reset: (state) => initialState,
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getNotes.pending, (state) => {
-        state.notes = null;
+        state.isLoading = true;
       })
       .addCase(getNotes.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
         state.notes = action.payload;
       })
+      .addCase(getNotes.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(createNote.pending, (state) => {
+        state.isLoading = true;
+      })
       .addCase(createNote.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
         state.notes.push(action.payload);
+      })
+      .addCase(createNote.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
       });
   },
 });
 
+export const { reset } = noteSlice.actions;
 export default noteSlice.reducer;

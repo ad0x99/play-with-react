@@ -1,4 +1,3 @@
-import { mongoose } from "@typegoose/typegoose";
 import { Report, StatusCode } from "@expressots/core";
 import { AuthRepository } from "@repositories/authentication/auth.repository";
 import { TicketRepository } from "@repositories/tickets/ticket.repository";
@@ -104,13 +103,12 @@ class TicketUseCase {
                 );
             }
 
-            // TODO: fix permission issue
-            // if (isTicketExist.user !== req.userId) {
-            //     throw this.report.error(
-            //         ERROR_MESSAGE.TICKET_PERMISSION_ERROR,
-            //         StatusCode.Forbidden,
-            //     );
-            // }
+            if (String(isTicketExist.user) !== String(req.userId)) {
+                throw this.report.error(
+                    ERROR_MESSAGE.TICKET_PERMISSION_ERROR,
+                    StatusCode.Forbidden,
+                );
+            }
 
             if (product) {
                 conditions.product = product;
@@ -150,7 +148,7 @@ class TicketUseCase {
                 );
             }
 
-            if (isTicketExist.user !== req.userId) {
+            if (String(isTicketExist.user) !== String(req.userId)) {
                 throw this.report.error(
                     ERROR_MESSAGE.TICKET_PERMISSION_ERROR,
                     StatusCode.Forbidden,

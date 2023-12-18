@@ -23,7 +23,7 @@ class NoteUseCase {
     async getNotes(
         req: Request,
         params: GetNoteParams,
-    ): Promise<IGetNoteResponse | null> {
+    ): Promise<IGetNoteResponse[] | []> {
         try {
             const ticket = await this.ticketRepository.getById(params.ticketId);
 
@@ -41,9 +41,12 @@ class NoteUseCase {
                 );
             }
 
-            return await this.noteRepository.findOne({
-                ticket: params.ticketId,
-            });
+            return await this.noteRepository.getList(
+                {
+                    ticket: params.ticketId,
+                },
+                { sort: { date: -1 } },
+            );
         } catch (error) {
             throw error;
         }

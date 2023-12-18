@@ -11,8 +11,13 @@ import { BaseController, StatusCode } from "@expressots/core";
 import { Request, Response } from "express";
 import { isAuthenticate } from "middlewares/auth.middlewares";
 import { NoteUseCase } from "./note.usecase";
-import { CreateNoteDTO, CreateNoteParams, GetNoteParams } from "./note.dto";
-import { ObjectId } from "mongoose";
+import {
+    CreateNoteDTO,
+    CreateNoteParams,
+    GetNoteParams,
+    ICreateNoteResponse,
+    IGetNoteResponse,
+} from "./note.dto";
 
 @controller("/tickets/:ticketId/notes")
 class NoteController extends BaseController {
@@ -25,7 +30,7 @@ class NoteController extends BaseController {
         @param() params: GetNoteParams,
         @response() res: Response,
         @request() req: Request,
-    ) {
+    ): Promise<IGetNoteResponse[] | []> {
         return this.callUseCaseAsync(
             this.noteUseCase.getNotes(req, params),
             res,
@@ -39,7 +44,7 @@ class NoteController extends BaseController {
         @body() payload: CreateNoteDTO,
         @response() res: Response,
         @request() req: Request,
-    ) {
+    ): Promise<ICreateNoteResponse | null> {
         return this.callUseCaseAsync(
             this.noteUseCase.createNote(req, params, payload),
             res,

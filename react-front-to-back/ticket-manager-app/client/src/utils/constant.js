@@ -16,3 +16,12 @@ export const API_URL = {
   TICKETS: '/tickets',
   NOTES: '/notes',
 };
+
+export const CLIENT_URL = {
+  ROOT: '/',
+  LOGIN: '/login',
+  REGISTER: '/register',
+  NEW_TICKET: '/new-ticket',
+  TICKETS: '/tickets',
+  TICKET: '/tickets/:ticketId',
+};

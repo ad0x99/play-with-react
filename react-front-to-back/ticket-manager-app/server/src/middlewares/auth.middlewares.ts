@@ -40,8 +40,8 @@ export const isAuthenticate = async (
             next();
         } else {
             report.error(ERROR_MESSAGE.MISSING_AUTHORIZATION);
-            return res.status(StatusCode.Forbidden).json({
-                errorCode: StatusCode.Forbidden,
+            return res.status(StatusCode.Unauthorized).json({
+                errorCode: StatusCode.Unauthorized,
                 errorMessage: ERROR_MESSAGE.MISSING_AUTHORIZATION,
             });
         }

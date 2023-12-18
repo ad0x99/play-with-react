@@ -1,8 +1,8 @@
 import { FaSignInAlt, FaSignOutAlt, FaUser } from 'react-icons/fa';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { logout, reset } from '../features/auth/authSlice';
 import { toast } from 'react-toastify';
+import { logout } from '../features/auth/authSlice';
 
 const Header = () => {
   const navigate = useNavigate();
@@ -11,7 +11,6 @@ const Header = () => {
 
   const onLogout = () => {
     dispatch(logout());
-    dispatch(reset());
     navigate('/');
 
     toast.success("You've been logged out", {

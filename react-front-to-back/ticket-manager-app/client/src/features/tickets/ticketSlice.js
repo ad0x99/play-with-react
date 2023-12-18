@@ -6,10 +6,6 @@ import { extractErrorMessage } from '../../utils/errorHandler';
 const initialState = {
   tickets: [],
   ticket: {},
-  isError: false,
-  isSuccess: false,
-  isLoading: false,
-  message: '',
 };
 
 // Create new ticket
@@ -68,48 +64,20 @@ export const closeTicket = createAsyncThunk(
 export const ticketSlice = createSlice({
   name: 'tickets',
   initialState,
-  reducers: {
-    reset: (state) => initialState,
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(createTicket.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(createTicket.fulfilled, (state) => {
-        state.isLoading = false;
-        state.isSuccess = true;
-      })
-      .addCase(createTicket.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.message = action.payload;
-      })
       .addCase(getTickets.pending, (state) => {
-        state.isLoading = true;
+        state.tickets = null;
       })
       .addCase(getTickets.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isSuccess = true;
         state.tickets = action.payload;
       })
-      .addCase(getTickets.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.message = action.payload;
-      })
       .addCase(getTicket.pending, (state) => {
-        state.isLoading = true;
+        state.ticket = null;
       })
       .addCase(getTicket.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isSuccess = true;
         state.ticket = action.payload;
-      })
-      .addCase(getTicket.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.message = action.payload;
       })
       .addCase(closeTicket.fulfilled, (state, action) => {
         state.ticket = action.payload;
@@ -120,5 +88,4 @@ export const ticketSlice = createSlice({
   },
 });
 
-export const { reset } = ticketSlice.actions;
 export default ticketSlice.reducer;

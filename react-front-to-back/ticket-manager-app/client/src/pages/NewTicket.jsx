@@ -1,15 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { createTicket, reset } from '../features/tickets/ticketSlice';
-import Spinner from '../components/Spinner';
 import BackButton from '../components/BackButton';
+import Spinner from '../components/Spinner';
+import { createTicket } from '../features/tickets/ticketSlice';
 
 const NewTicket = () => {
-  const { user, isLoading, isSuccess, isError, message } = useSelector(
-    (state) => state.auth
-  );
+  const { user, isLoading } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -18,30 +16,21 @@ const NewTicket = () => {
   const [product, setProduct] = useState('');
   const [description, setDescription] = useState('');
 
-  useEffect(() => {
-    if (isError) {
-      console.log(isError);
-      toast.error(message, { autoClose: 3000 });
-    }
-
-    if (isSuccess) {
-      toast.success('Your ticket has been created successfully', {
-        autoClose: 3000,
-      });
-      dispatch(reset());
-      navigate('/tickets');
-    }
-
-    dispatch(reset());
-  }, [dispatch, navigate, isError, isSuccess, message]);
-
   if (isLoading) {
     return <Spinner />;
   }
 
   const onSubmit = (e) => {
     e.preventDefault();
-    dispatch(createTicket({ product, description }));
+    dispatch(createTicket({ product, description }))
+      .unwrap()
+      .then(() => {
+        toast.success('Your ticket has been created successfully', {
+          autoClose: 3000,
+        });
+        navigate('/tickets');
+      })
+      .catch(toast.error);
   };
 
   return (

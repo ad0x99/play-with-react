@@ -9,6 +9,7 @@ import Register from './pages/Register';
 import PrivateRoute from './components/PrivateRoute';
 import Tickets from './pages/Tickets';
 import Ticket from './pages/Ticket';
+import { CLIENT_URL } from './utils/constant';
 
 function App() {
   return (
@@ -18,11 +19,11 @@ function App() {
           <Header />
 
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+            <Route path={CLIENT_URL.ROOT} element={<Home />} />
+            <Route path={CLIENT_URL.LOGIN} element={<Login />} />
+            <Route path={CLIENT_URL.REGISTER} element={<Register />} />
             <Route
-              path="/new-ticket"
+              path={CLIENT_URL.NEW_TICKET}
               element={
                 <PrivateRoute>
                   <NewTicket />
@@ -30,7 +31,7 @@ function App() {
               }
             />
             <Route
-              path="/tickets"
+              path={CLIENT_URL.TICKETS}
               element={
                 <PrivateRoute>
                   <Tickets />
@@ -38,7 +39,7 @@ function App() {
               }
             />
             <Route
-              path="/tickets/:ticketId"
+              path={CLIENT_URL.TICKET}
               element={
                 <PrivateRoute>
                   <Ticket />
